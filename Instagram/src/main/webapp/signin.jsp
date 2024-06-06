@@ -132,10 +132,10 @@ response.setHeader("Pragma", "no-cache"); // HTTP 1.0.
 response.setHeader("Expires", "0"); // Proxies.
 %>
 <main>
-        <img src="img/IG.jpeg" alt="" class="phoneImg">
+        <img src="img/karsten-winegeart-60GsdOMRFGc-unsplash.jpg" alt="" class="phoneImg">
         <div class="form-div">
             <form action="signin" method="post">
-                <img class="instaLogo" src="img/instagram-logo-illustration.png" alt="logo">
+                <img class="instaLogo" src="img/connect-high-resolution-logo-black.png" alt="logo">
                 <input type="text" class="input" name="email" placeholder="phone number, username, or email" required>
                 <input type="password" class="input" name="password" required placeholder="Password">
                 <button class="login-btn">Log In</button>

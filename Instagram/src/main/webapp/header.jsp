@@ -135,7 +135,7 @@ display:flex;
             <nav>
                 <ul>
                     <li><a href="#"><i class="fa-solid fa-house"></i></a></li>
-                <li><a href="${pageContext.request.contextPath}/chat"><i class="fa-solid fa-message"></i></a></li>
+                <li><a href="${pageContext.request.contextPath}/userlistservlet"><i class="fa-solid fa-message"></i></a></li>
                 <li><a href="#"><i class="fa-solid fa-square-plus"></i></a></li>
                 <li><a href="#"><i class="fa-solid fa-heart"></i></a></li>
                 <ul class="navbar-nav">

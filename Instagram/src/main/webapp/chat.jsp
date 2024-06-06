@@ -95,17 +95,18 @@
     </style>
 </head>
 <body>
+<%@include file="header.jsp" %>
     <div class="friend-list" id="friend-list">
-        <h2>Users</h2>
+        <h2>chat with friends</h2>
     <div class="modal-body" style="overflow-y: scroll; max-height: 350px;">
     <%
         List<Map<String, String>> users = (List<Map<String, String>>) request.getAttribute("users");
         if (users != null) {
-            out.println("Users list size: " + users.size() + "<br>"); // Debugging output
+           // out.println("Users list size: " + users.size() + "<br>"); // Debugging output
             for (Map<String, String> user : users) {
-                out.println("User ID: " + user.get("id") + ", Username: " + user.get("username") + "<br>"); // Debugging output
+               // out.println("User ID: " + user.get("id") + ", Username: " + user.get("username") + "<br>"); // Debugging output
     %>
-    <div class="card" onclick="javascript:window.location='view-message?id=<%= user.get("id") %>';">
+     <div class="card" onclick="javascript:window.location='view-message.jsp?receiverId=<%= user.get("id") %>';">
         <div class="card-body">
             <span><%= user.get("username") %></span>
             <i class="fas fa-paper-plane"></i>
@@ -121,16 +122,16 @@
     
     
     </div>
-    <div class="chat-container">
+   <!--  <div class="chat-container">
         <h2>Chat with Friends</h2>
         <div class="chat-box" id="chat-box">
-            <!-- Dynamic chat messages will appear here -->
+            Dynamic chat messages will appear here
         </div>
         <div class="message-input">
             <input type="text" id="message-input" placeholder="Type a message...">
             <button id="send-button">Send</button>
         </div>
-    </div>
+    </div> -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>

@@ -68,15 +68,15 @@ public class MessageDAO {
 
 	        while (resultSet.next()) {
 	            Map<String, String> user = new HashMap<>();
-	            user.put("id", String.valueOf(resultSet.getInt("id")));
-	            user.put("username", resultSet.getString("name"));
+	            user.put("id", String.valueOf(resultSet.getInt("user_id")));
+	            user.put("username", resultSet.getString("first_name"));
 	            users.add(user);
 	            System.out.println(users);
 	        }
 	    } catch (SQLException e) {
 	        e.printStackTrace();
 	    }
-	    return users; // Return the list of user maps
+	    return users; 
 	}
 
 }

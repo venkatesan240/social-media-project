@@ -123,10 +123,10 @@ main {
 </head>
 <body>
  <main>
-        <img src="IG.jpeg" alt="instagram-logo-illustration.png" class="phoneImg">	
+        <img src="img/karsten-winegeart-60GsdOMRFGc-unsplash.jpg" alt="instagram-logo-illustration.png" class="phoneImg">	
         <div class="form-div">
             <form action="signup" method="post">
-                <img class="instaLogo" src="instagram-logo-illustration.png" alt="logo">
+                <img class="instaLogo" src="img/connect-high-resolution-logo-black.png" alt="logo">
                 <input type="text" class="input" name="first-name" placeholder="first name" required>
                 <input type="text" class="input" name="last-name" placeholder="last name" required>
                 <input type="text" class="input" name="email" placeholder="email" required>

@@ -9,10 +9,12 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.google.gson.Gson;
 
 import dao.MessageDAO;
+import dao.UserDAO;
 import model.Message;
 
 
@@ -31,7 +33,7 @@ public class ChatServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		 response.setContentType("application/json");
 	        PrintWriter out = response.getWriter();
-
+	        HttpSession session = request.getSession();
 	        int senderId = Integer.parseInt(request.getParameter("senderId"));
 	        int receiverId = Integer.parseInt(request.getParameter("reciverId"));
 	        msg.setSenderId(senderId);
@@ -42,16 +44,22 @@ public class ChatServlet extends HttpServlet {
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
 			}
-	        out.print(new Gson().toJson(message));
-	        
+			request.setAttribute("message",message);
+			System.out.println("send ----> " + senderId);
+			//session.setAttribute("userid",senderId);
+			request.getRequestDispatcher("view-message.jsp").forward(request, response);
+	        //out.print(new Gson().toJson(message));
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		doGet(request, response);
         int senderId = Integer.parseInt(request.getParameter("senderId"));
-        int receiverId = Integer.parseInt(request.getParameter("reciverId"));
+        int receiverId = Integer.parseInt(request.getParameter("receiverId"));
         String message = request.getParameter("message");
-        
        
+        System.out.println("SenderID ---> " + senderId);
+        System.out.println("ReceiverID ---> " + receiverId);
+        
         msg.setSenderId(senderId);
         msg.setReceiverId(receiverId);
         msg.setMessage(message);
@@ -60,6 +68,7 @@ public class ChatServlet extends HttpServlet {
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
+       
 	}
 
 }

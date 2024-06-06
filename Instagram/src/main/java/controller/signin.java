@@ -68,16 +68,19 @@ public class signin extends HttpServlet {
 			HttpSession session=request.getSession();
 			session.setAttribute("email",email);
 			String name = null;
+			int userid;
 			try {
 				name = user1.getName(email);
+				userid=user1.getId(email);
 				//request.getRequestDispatcher("header.jsp").forward(request, response);
 			} catch (ClassNotFoundException | SQLException e) {
 				e.printStackTrace();
 				 request.setAttribute("errorMessage", "Internal error. Please try again later.");
 	                request.getRequestDispatcher("signin.jsp").forward(request, response);
 	                return;
-			} 
+			}
 			session.setAttribute("name", name);
+			session.setAttribute("userid",userid);
 			//response.sendRedirect("head.jsp");
 			request.getRequestDispatcher("header.jsp").forward(request, response);
 		}else {
