@@ -49,6 +49,7 @@ public class MessageDAO {
 	                message.put("message", resultSet.getString("message"));
 	                message.put("timestamp", resultSet.getString("timestamp"));
 	                messages.add(message);
+	                System.out.println(message);
 	                return message;
 	            }
 
@@ -71,7 +72,7 @@ public class MessageDAO {
 	            user.put("id", String.valueOf(resultSet.getInt("user_id")));
 	            user.put("username", resultSet.getString("first_name"));
 	            users.add(user);
-	            System.out.println(users);
+	            //System.out.println(users);
 	        }
 	    } catch (SQLException e) {
 	        e.printStackTrace();

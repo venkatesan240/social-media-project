@@ -31,6 +31,7 @@ header .logo{
 header .logo img{
 height:100%;
     object-fit: contain; 
+    padding-right:50px;
 }
 header .search-box{
     width: 300px;
@@ -39,6 +40,7 @@ header .search-box{
     align-items: center;
     border: 1px solid #ccc;
     border-radius: 5px;
+    margin-right:40px;
 }
 header .search-box input[type="search"] {
     flex: 1;
@@ -53,8 +55,9 @@ header nav ul{
     list-style: none;
 }
 header nav ul li{
-    margin-right: 40px;
+    margin-right: 20px;
     padding:5px;
+      justify-content: space-between;
 }
 header nav ul li a img{
     width: 22px;
@@ -126,7 +129,7 @@ display:flex;
 <div class="insta">
         <header>
             <div class="logo">
-                <img src="img/connect-high-resolution-logo-black.png" alt="insta" width="140px" height="70px">
+                <img src="img/connect-high-resolution-logo-black.png" alt="insta" width="200px" height="200px">
             </div>
             <div class="search-box">
                 <i class="fa-solid fa-magnifying-glass"></i>
@@ -136,7 +139,7 @@ display:flex;
                 <ul>
                     <li><a href="#"><i class="fa-solid fa-house"></i></a></li>
                 <li><a href="${pageContext.request.contextPath}/userlistservlet"><i class="fa-solid fa-message"></i></a></li>
-                <li><a href="#"><i class="fa-solid fa-square-plus"></i></a></li>
+                <li><a href="Post.jsp"><i class="fa-solid fa-square-plus"></i></a></li>
                 <li><a href="#"><i class="fa-solid fa-heart"></i></a></li>
                 <ul class="navbar-nav">
                     <li class="nav-item profile-icon">
@@ -145,14 +148,15 @@ display:flex;
                        
                         </a>
                         <div class="dropdown-content">
+                        <div class="name">
+                      <a><%= session.getAttribute("name")%></a>
+                    </div>
                             <a href="logout">Logout</a>
                             <a href="update.jsp">Profile Update</a>
                         </div>
                     </li>
                  </ul>
-                 <div class="name">
-                      <a><%= session.getAttribute("name")%></a>
-                    </div>
+                 
             </nav>
         </header>
 </div>

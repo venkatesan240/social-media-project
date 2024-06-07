@@ -6,12 +6,16 @@
 <%@ page import="model.User" %>
 
 <%
-    List<Map<String, String>> messages = (List<Map<String, String>>) request.getAttribute("messages");
+    List<Map<String, String>> messages = (List<Map<String, String>>) request.getAttribute("message");
 	String currentUserId = session.getAttribute("userid") != null ? session.getAttribute("userid").toString() : "";
     String toUserId = request.getParameter("receiverId");
     UserDAO userDAO = new UserDAO();
+    System.out.println("messages :"+messages);
 %>
-
+<%
+    String receiverId = request.getParameter("receiverId");
+	System.out.println("receiverId :"+receiverId);
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -104,13 +108,8 @@
 <div class="type_msg">
     <form method="post" action="ChatServlet">
         <div class="input_msg_write d-flex">
-        <% HttpSession sess = request.getSession();
-        	String id = (String) sess.getAttribute("userid");
-        	System.out.println("id ......> " + id);
-        %>
-        
             <input type="hidden" name="senderId" value="<%= session.getAttribute("userid") %>" />
-            <input type="hidden" name="receiverId" value="<%= request.getParameter("receiverId") %>" />
+            <input type="hidden" name="receiverId" value="<%= receiverId %>" />
             <input type="text" name="message" class="write_msg" placeholder="Type a message" required />
             <button class="msg_send_btn ml-2" type="submit">
                 <i class="fa-solid fa-paper-plane"></i>

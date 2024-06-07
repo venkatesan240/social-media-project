@@ -135,7 +135,7 @@ main {
                 <button class="login-btn">Register</button>
 <% 
     // Check if there's an error message
-    String errorMessage = (String) request.getAttribute("rmsg");
+    String errorMessage = (String) request.getAttribute("error");
     if (errorMessage != null) {
 %>
         <script type="text/javascript">
@@ -144,17 +144,14 @@ main {
 <%
     }
 %>
-				<p id="or">or</p>
-                <a href="#" class="fb-login"><i class='bx bxl-facebook-square'></i>Log in with Facebook</a>
+				<!-- <p id="or">or</p> -->
+                <!-- <a href="#" class="fb-login"><i class='bx bxl-facebook-square'></i>Log in with Facebook</a> -->
             </form>
-            <div class="sign-up">
-                <!-- <p>Don't have an account? <a href="#" class="sign-link">Sign up</a></p> -->
-            </div>
             <div class="get-app">
                 <p>Get the app</p>
                 <div class="store">
-                    <img id="play" src="playStore.png" alt="">
-                    <img id="microsoft" src="getMicrosoft.png" alt="">
+                    <img id="play" src="img/playStore.png" alt="">
+                    <img id="microsoft" src="img/getMicrosoft.png" alt="">
                 </div>
             </div>
         </div>
