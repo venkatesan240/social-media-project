@@ -68,11 +68,14 @@ main {
     width: 97%;
     padding: .4rem;
     font-weight: 700;
-    background-color: rgb(1, 183, 255);
+     background-color: rgb(235, 15, 15);
     border: none;
     border-radius: 8px;
     margin: 8px 0px;
     color: white;
+}
+.login-btn:hover{
+	 background-color: rgb(18, 17, 17);
 }
 
 #or {

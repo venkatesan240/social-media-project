@@ -33,6 +33,7 @@ public class userlistservlet extends HttpServlet {
         }
         request.setAttribute("users", users);
         request.getRequestDispatcher("chat.jsp").forward(request, response);
+        
     }
 
 

@@ -32,33 +32,34 @@ public class MessageDAO {
 	        }
 	}
 
-	public Map<String, String> getMessage(Message msg) throws ClassNotFoundException {
-		 try (Connection connection = db.getConnection()) {
-	            String sql = "SELECT sender_id, message, timestamp FROM messages WHERE (sender_id = ? AND receiver_id = ?) OR (receiver_id = ? AND sender_id = ?) ORDER BY timestamp";
-	            PreparedStatement statement = connection.prepareStatement(sql);
-	            statement.setInt(1, msg.getSenderId());
-	            statement.setInt(2, msg.getReceiverId());
-	            statement.setInt(3, msg.getReceiverId());
-	            statement.setInt(4, msg.getSenderId());	
-	            ResultSet resultSet = statement.executeQuery();
+	public ArrayList<Message> getMessage(Message msg) throws ClassNotFoundException {
+	    ArrayList<Message> messages = new ArrayList<>();
+	    try (Connection connection = db.getConnection()) {
+	        String sql = "SELECT * FROM messages WHERE (sender_id = ? AND receiver_id = ?) OR (receiver_id = ? AND sender_id = ?) ORDER BY timestamp";
+	        PreparedStatement statement = connection.prepareStatement(sql);
+	        statement.setInt(1, msg.getSenderId());
+	        statement.setInt(2, msg.getReceiverId());
+	        statement.setInt(3, msg.getReceiverId());
+	        statement.setInt(4, msg.getSenderId());    
+	        ResultSet rs = statement.executeQuery();
 
-	            List<Map<String, String>> messages = new ArrayList<>();
-	            while (resultSet.next()) {
-	                Map<String, String> message = new HashMap<>();
-	                message.put("senderId", String.valueOf(resultSet.getInt("sender_id")));
-	                message.put("message", resultSet.getString("message"));
-	                message.put("timestamp", resultSet.getString("timestamp"));
-	                messages.add(message);
-	                System.out.println(message);
-	                return message;
-	            }
-
-	            
-	        } catch (SQLException e) {
-	            e.printStackTrace();
+	        while (rs.next()) {
+	        	Message msg1=new Message();
+	        	msg1.setId(rs.getInt("id"));
+	        	msg1.setMessage(rs.getString("message"));
+	        	msg1.setSenderId(rs.getInt("sender_id"));
+	            msg1.setReceiverId(rs.getInt("receiver_id"));
+	            msg1.setTimestamp(rs.getString("timestamp"));
+	            messages.add(msg1);
+	            System.out.println(msg1);
 	        }
-		return null;
+	        
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return messages;
 	}
+
 	
 	public List<Map<String, String>> selectUsers() throws ClassNotFoundException {
 	    List<Map<String, String>> users = new ArrayList<>();

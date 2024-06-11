@@ -8,6 +8,7 @@ public class User {
 	private String email;
 	private String password;
 	private String confirmpassword;
+	private byte[] profile;
 	
 	public User() {
 		super();
@@ -21,6 +22,13 @@ public class User {
 		this.email = email;
 		this.password = password;
 		this.confirmpassword = confirmpassword;
+	}
+	
+	public byte[] getProfile() {
+		return profile;
+	}
+	public void setProfile(byte[] profile) {
+		this.profile = profile;
 	}
 	public int getUser_id() {
 		return user_id;

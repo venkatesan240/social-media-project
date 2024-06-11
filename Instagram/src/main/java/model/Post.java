@@ -5,6 +5,7 @@ import java.util.Arrays;
 public class Post {
 	
 	private int id;
+	private int userid;
     private String username;
     private String description;
     private byte[] image;
@@ -20,6 +21,13 @@ public class Post {
 		this.description = description;
 		this.image = image;
 		this.timestamp = timestamp;
+	}
+	
+	public int getUserid() {
+		return userid;
+	}
+	public void setUserid(int userid) {
+		this.userid = userid;
 	}
 	public int getId() {
 		return id;

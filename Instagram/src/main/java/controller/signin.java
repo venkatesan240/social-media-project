@@ -82,7 +82,7 @@ public class signin extends HttpServlet {
 			session.setAttribute("name", name);
 			session.setAttribute("userid",userid);
 			//response.sendRedirect("head.jsp");
-			request.getRequestDispatcher("header.jsp").forward(request, response);
+			request.getRequestDispatcher("home.jsp").forward(request, response);
 		}else {
 			request.setAttribute("errorMessage", "Invalid username or password");
 			 request.getRequestDispatcher("signin.jsp").forward(request, response);

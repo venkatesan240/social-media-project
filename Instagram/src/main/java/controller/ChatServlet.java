@@ -2,6 +2,7 @@ package controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -46,20 +47,22 @@ public class ChatServlet extends HttpServlet {
 		//doGet(request, response);
 		 int senderId = Integer.parseInt(request.getParameter("senderId"));
 	        int receiverId = Integer.parseInt(request.getParameter("receiverId"));
+	        System.out.println("senderid----"+senderId);
+	        System.out.println("receiverId----"+receiverId);
 	        msg.setSenderId(senderId);
 	        msg.setReceiverId(receiverId);
-	        Map<String, String> message = null;
+	        ArrayList<Message> messages = new ArrayList<>();
 			try {
-				message = msgdao.getMessage(msg);
+				messages = msgdao.getMessage(msg);
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
 			}
-			request.setAttribute("message",message);
+			request.setAttribute("messages",messages);
         String message1 = request.getParameter("message");
        
         //System.out.println("SenderID ---> " + senderId);
         //System.out.println("ReceiverID ---> " + receiverId);
-        
+   
         msg.setSenderId(senderId);
         msg.setReceiverId(receiverId);
         msg.setMessage(message1);
@@ -68,7 +71,7 @@ public class ChatServlet extends HttpServlet {
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
-        request.getRequestDispatcher("view-message.jsp").forward(request, response);
+        request.getRequestDispatcher("viewmessage.jsp").forward(request, response);
 	}
 
 }

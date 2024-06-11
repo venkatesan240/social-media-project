@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import model.User;
 import util.DbConnection;
@@ -47,13 +49,14 @@ public class UserDAO {
 	}
 
 	public void updateUser(User user,String email1) throws SQLException, ClassNotFoundException {
-		String updateQuery="update user set first_name=?,last_name=?,email=?,password=? where email=?";
+		String updateQuery="update user set first_name=?,last_name=?,email=?,password=?,profile=? where email=?";
 		PreparedStatement ps=db.getConnection().prepareStatement(updateQuery);
 		ps.setString(1,user.getFirst_name());
 		ps.setString(2,user.getLast_name());
 		ps.setString(3,user.getEmail());
 		ps.setString(4,user.getPassword());
-		ps.setString(5,email1);
+		ps.setBytes(5,user.getProfile());
+		ps.setString(6,email1);
 		ps.executeUpdate();
 	}
 	
@@ -81,10 +84,11 @@ public class UserDAO {
 		
 	}
 	public User getUserById(int userId) throws ClassNotFoundException {
+		//System.out.println("gerUserId print");
         User user = null;
-        try (Connection connection = db.getConnection()) {
-            String sql = "SELECT first_name, last_name, email FROM users WHERE id = ?";
-            PreparedStatement statement = connection.prepareStatement(sql);
+        try {
+            String sql = "SELECT first_name, last_name, email,profile FROM user WHERE user_id = ?";
+            PreparedStatement statement = db.getConnection().prepareStatement(sql);
             statement.setInt(1, userId);
             ResultSet resultSet = statement.executeQuery();
 
@@ -94,10 +98,34 @@ public class UserDAO {
                 user.setFirst_name(resultSet.getString("first_name"));
                 user.setLast_name(resultSet.getString("last_name"));
                 user.setEmail(resultSet.getString("email"));
+                user.setProfile(resultSet.getBytes("profile"));
+                
+               // System.out.println("is there - " +resultSet.getString("first_name"));
+                return user;
             }
         } catch (SQLException e) {
+        	System.out.println("failed");
             e.printStackTrace();
         }
-        return user;
+		return user;
+       
     }
+	
+	public List<User> searchUsersByUsername(String query) throws SQLException, ClassNotFoundException {
+	    List<User> users = new ArrayList<>();
+	    String searchQuery = "SELECT user_id, first_name FROM user WHERE first_name LIKE ?";
+	    PreparedStatement ps = db.getConnection().prepareStatement(searchQuery);
+	    ps.setString(1, "%" + query + "%");
+	    ResultSet rs = ps.executeQuery();
+	    while (rs.next()) {
+	        User user = new User();
+	        user.setUser_id(rs.getInt("user_id"));
+	        user.setFirst_name(rs.getString("first_name"));
+	        users.add(user);
+	    }
+	    return users;
+	}
+
+	
+	 
 }

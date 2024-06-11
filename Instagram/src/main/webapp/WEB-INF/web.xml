@@ -3,18 +3,18 @@
   <display-name> connect</display-name>
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>
-    <welcome-file>signin.jsp</welcome-file>
+    <welcome-file> signin.jsp</welcome-file>
     <welcome-file>index.htm</welcome-file>
     <welcome-file>default.html</welcome-file>
     <welcome-file>default.jsp</welcome-file>
     <welcome-file>default.htm</welcome-file>
   </welcome-file-list>
   <servlet>
-    <servlet-name>FileUploadServlet</servlet-name>
-    <servlet-class>com.example.FileUploadServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>FileUploadServlet</servlet-name>
-    <url-pattern>/upload</url-pattern>
-  </servlet-mapping>
+    <servlet-name>SearchUsersServlet</servlet-name>
+    <servlet-class>controller.SearchUsersServlet</servlet-class>
+</servlet>
+<servlet-mapping>
+    <servlet-name>SearchUsersServlet</servlet-name>
+    <url-pattern>/searchUsers</url-pattern>
+</servlet-mapping>
 </web-app>

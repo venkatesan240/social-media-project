@@ -15,7 +15,8 @@
             border-radius: 10px;
             box-shadow: 2px 2px 12px #aaa;
             font-family: Arial, sans-serif;
-            margin-top:100px;
+            margin-top:50px;
+            margin-bottom:50px;
         }
         .form-container h1 {
             text-align: center;
@@ -51,30 +52,25 @@
 <body>
 <%@include file="header.jsp" %>
 	<div class="form-container">
-        <h1>Profile Update</h1>
-        <form action="UpdateProfile" method="post">
-            <span>
-                <label for="first-name">First Name:</label>
-                <input type="text" id="first-name" name="first-name" required>
-            </span>
-            <span>
-                <label for="last-name">Last Name:</label>
-                <input type="text" id="last-name" name="last-name" required>
-            </span>
-            <span>
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required>
-            </span>
-            <span>
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password" required>
-            </span>
-            <span>
-                <label for="confirm-password">Confirm Password:</label>
-                <input type="password" id="confirm-password" name="confirm-password" required>
-            </span>
-            <button type="submit">Update Profile</button>
-        </form>
-    </div>
+		<h1>Profile Update</h1>
+		<form action="UpdateProfile" method="post"
+			enctype="multipart/form-data">
+			<span> <label for="first-name">First Name:</label> <input
+				type="text" id="first-name" name="first-name" required>
+			</span> <span> <label for="last-name">Last Name:</label> <input
+				type="text" id="last-name" name="last-name" required>
+			</span> <span> <label for="email">Email:</label> <input type="email"
+				id="email" name="email" required>
+			</span> <span> <label for="profile-image">Set Profile:</label> <input
+				type="file" id="profile-image" name="profile-image" accept="image/*">
+			</span> <span> <label for="password">Password:</label> <input
+				type="password" id="password" name="password" required>
+			</span> <span> <label for="confirm-password">Confirm
+					Password:</label> <input type="password" id="confirm-password"
+				name="confirm-password" required>
+			</span>
+			<button type="submit">Update Profile</button>
+		</form>
+	</div>
 </body>
 </html>
