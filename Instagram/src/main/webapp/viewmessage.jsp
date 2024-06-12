@@ -26,6 +26,46 @@ try {
 <title>Insert title here</title>
 <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<style>
+.type_msg {
+    padding: 20px;
+    background-color: #f6f6f6;
+}
+
+.input_msg_write {
+    width: 100%;
+    position: relative;
+}
+
+.input_msg_write input[type="text"] {
+    width: calc(100% - 40px); /* Adjust the width as needed */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+}
+
+.input_msg_write button {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 40px;
+    height: 100%;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+.input_msg_write button i {
+    font-size: 20px;
+    color: #007bff; /* Adjust the color as needed */
+}
+
+.input_msg_write button:hover i {
+    color: #0056b3; /* Adjust the hover color as needed */
+}
+
+</style>
 </head>
 <body>
 <div class="container">
@@ -39,15 +79,13 @@ try {
         if (messages != null) {
             for (Message message : messages) {
                 String currentUserId = String.valueOf(message.getSenderId());
-                System.out.println(message.getSenderId());
-                if (currentUserId.equals(session.getAttribute("userid"))) {
+                if (currentUserId.equals(session.getAttribute("userid").toString())) {
     %>
                     <div class="row justify-content-end">
                         <div class="col-8 alert alert-primary" role="alert">
                             <h5>
                                 me <a href="${pageContext.request.contextPath}/view-message?id=<%= senderId %>&delete=<%= message.getId() %>" class="card-link" style="float: right;"><i style="color: red;" class="far fa-trash-alt"></i></a>
                             </h5>
-                            <%= message.getSenderId() %>
                             <%= message.getMessage() %>
                             <p style="text-align: right;"><%= message.getTimestamp() %></p>
                         </div>
@@ -60,7 +98,6 @@ try {
                             <h5>
                                 <%= new UserDAO().getUserById(message.getReceiverId()).getFirst_name() %> <a href="${pageContext.request.contextPath}/view-message?id=<%= request.getAttribute("receiverId") %>&delete=<%= message.getId() %>" class="card-link" style="float: right;"><i style="color: red;" class="far fa-trash-alt"></i></a>
                             </h5>
-                            <%= message.getReceiverId() %>
                             <%= message.getMessage() %>
                             <p style="text-align: right;"><%= message.getTimestamp() %></p>
                         </div>

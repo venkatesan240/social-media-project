@@ -10,6 +10,7 @@ public class Post {
     private String description;
     private byte[] image;
     private String timestamp;
+    private int likeCount; 
     
 	public Post() {
 		super();
@@ -22,7 +23,12 @@ public class Post {
 		this.image = image;
 		this.timestamp = timestamp;
 	}
-	
+	public int getLikeCount() {
+		return likeCount;
+	}
+	public void setLikeCount(int likeCount) {
+		this.likeCount = likeCount;
+	}
 	public int getUserid() {
 		return userid;
 	}

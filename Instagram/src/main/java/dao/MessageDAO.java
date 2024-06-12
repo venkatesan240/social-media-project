@@ -39,8 +39,11 @@ public class MessageDAO {
 	        PreparedStatement statement = connection.prepareStatement(sql);
 	        statement.setInt(1, msg.getSenderId());
 	        statement.setInt(2, msg.getReceiverId());
-	        statement.setInt(3, msg.getReceiverId());
-	        statement.setInt(4, msg.getSenderId());    
+	        statement.setInt(3, msg.getSenderId());
+	        statement.setInt(4, msg.getReceiverId());
+	        
+	       
+	            
 	        ResultSet rs = statement.executeQuery();
 
 	        while (rs.next()) {

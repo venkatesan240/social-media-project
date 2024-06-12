@@ -15,6 +15,13 @@
         e.printStackTrace();
     }
 %>
+ <%
+    // Assuming 'post' is available in the request scope
+    Integer userId = (Integer) session.getAttribute("userid");
+    if (userId == null) {
+        userId = -1; // Default value or handle unauthenticated user case
+    }
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,353 +29,229 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Instagram-like Post</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <style>
+        /* Basic reset */
+       * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             font-family: Arial, sans-serif;
-            margin: 0;
+            background-color: #f4f4f4;
             padding: 20px;
-            background-color: #f8f8f8;
         }
-        .post-form {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+        #posts-container {
             max-width: 600px;
-            margin: auto;
-            margin-bottom: 20px;
+            margin: 0 auto;
         }
-        .post-form h2 {
-            margin-top: 0;
-        }
-        .post-form input[type="file"] {
-            display: block;
-            margin-bottom: 15px;
-        }
-        .post-form textarea {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 15px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
-        .post-form button {
-            padding: 10px 15px;
-            border: none;
-            border-radius: 5px;
-            background-color: #007bff;
-            color: white;
-            cursor: pointer;
-        }
-        .post-form button:hover {
-            background-color: #0056b3;
-        }
+
         .posts {
             background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            max-width: 600px;
-            margin: auto;
+            border: 1px solid #ddd;
+            border-radius: 5px;
             margin-bottom: 20px;
-            overflow: hidden;
+            padding: 15px;
         }
+
         .post-title {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px;
-            border-bottom: 1px solid #ddd;
+            margin-bottom: 15px;
         }
+
         .post-left {
             display: flex;
             align-items: center;
         }
-        .image img {
+
+        .post-left .image img {
             border-radius: 50%;
         }
-        .details {
+
+        .post-left .details {
             margin-left: 10px;
         }
-        .details .name {
-            font-weight: bold;
-            margin: 0;
+
+        .post-right .fa-ellipsis {
+            cursor: pointer;
         }
-        .details .location {
-            color: #777;
-            margin: 0;
-            font-size: 0.9em;
+
+        .delete-option {
+            display: none;
+            position: absolute;
+            background-color: white;
+            border: 1px solid #ddd;
+            padding: 5px;
         }
-        .post-content {
-            text-align: center;
+
+        .post-content img {
+            width: 100%;
+            border-radius: 5px;
+            margin-bottom: 10px;
         }
-        .post-content p{
-        text-align:left;
-        padding-left:10px;
-        }
-       /* Ensure the image within the post-content class maintains its aspect ratio and does not become oval */
-.post-content img {
-    width: 100%;  /* Make the image take the full width of its container */
-    height: auto; /* Maintain the aspect ratio */
-    display: block; /* Ensure there's no extra space below the image */
-    border-radius: 0; /* Remove any border-radius if applied */
-}
-       
+
         .post-footer {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px;
             border-top: 1px solid #ddd;
+            padding-top: 10px;
+            margin-top: 10px;
         }
-        .like-share-commant i {
+
+        .like-share-comment {
+            display: flex;
+            align-items: center;
+        }
+
+        .like-button {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            margin-right: 15px;
+        }
+
+        .like-button .fa-heart {
+            margin-right: 5px;
+            transition: color 0.3s;
+        }
+
+        .like-button .fa-heart.active {
+            color: #e74c3c;
+        }
+
+        .like-share-comment i {
             margin-right: 15px;
             cursor: pointer;
         }
-        .save i {
-            cursor: pointer;
-        }
+
         .add-comment {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            padding: 15px;
             border-top: 1px solid #ddd;
+            padding-top: 10px;
+            margin-top: 10px;
         }
-        .left-side {
-            display: flex;
-            align-items: center;
-            width: 80%;
+
+        .add-comment .left-side {
+            flex-grow: 1;
         }
-        .left-side i {
-            margin-right: 10px;
-        }
-        .left-side input {
+
+        .add-comment input[type="text"] {
             width: 100%;
-            padding: 10px;
+            padding: 8px;
             border: 1px solid #ddd;
-            border-radius: 20px;
+            border-radius: 5px;
         }
-        .right-side p {
-            margin: 0;
-            color: #007bff;
+
+        .add-comment .right-side p {
             cursor: pointer;
+            color: #007BFF;
+            margin-left: 10px;
         }
-       /*  likes */
-        .like-button {
-            cursor: pointer;
+
+        .fa-heart, .fa-comment, .fa-paper-plane {
+            font-size: 24px;
         }
-        .like-button .fa-heart {
-            color: #ccc; /* Default color */
-           transition: color 0.3s; 
-        }
-        .like-button .fa-heart:hover {
-            color: #ff4081; /* Change color on hover */
-        }
-        .like-button .liked .fa-heart {
-            color: #ff4081; /* Color when liked */
-        }	 
-       /* Post Right Styles */
-.post-right {
-    position: relative;
-    display: inline-block;
-}
-
-.post-right i {
-    cursor: pointer;
-    font-size: 20px;
-    color: #333;
-}
-
-.delete-option {
-    position: absolute;
-    top: 20px;
-    right: 0;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    padding: 10px;
-    border-radius: 4px;
-    z-index: 1000;
-}
-
-.delete-option button {
-    background-color: #e74c3c;
-    color: #fff;
-    border: none;
-    padding: 8px 12px;
-    cursor: pointer;
-    border-radius: 4px;
-    font-size: 14px;
-}
-
-.delete-option button:hover {
-    background-color: #c0392b;
-}
-/* Basic reset */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-/* Post footer styling */
-.post-footer {
-    background-color: #f9f9f9;
-    padding: 10px;
-    border-top: 1px solid #e0e0e0;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-/* Like, share, and comment section */
-.like-share-comment {
-    display: flex;
-    align-items: center;
-}
-
-.post {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-/* Heart icon styling */
-.fa-heart {
-    font-size: 24px;
-    cursor: pointer;
-    transition: color 0.3s;
-}
-
-.fa-heart.fa-regular {
-    color: #ccc;
-}
-
-.fa-heart.fa-solid {
-    color: #e74c3c;
-}
-
-/* Like count styling */
-#like-count-1 {
-    font-size: 16px;
-    color: #333;
-}
-
-/* Additional classes for dynamic like counts */
-[id^="like-count-"] {
-    font-size: 16px;
-    color: #333;
-}
-
-        
     </style>
 </head>
 <body>
-<%@include file="header.jsp" %>
-<div class="post-form">
-    <h2>Create a Post</h2>
-    <form action="PostServlet" method="post" enctype="multipart/form-data">
-    	<input type="hidden" name="username" value="<%= session.getAttribute("name") %>" />
-    	<input type="hidden" name="userid" value="<%= session.getAttribute("userid") %>" />
-        <input type="file" name="post-image" id="post-image" accept="image/*" required>
-        <textarea name="post-content" id="post-content" rows="4" placeholder="Description" required></textarea>
-        <button type="submit">Post</button>
-    </form>
-</div>
-
-<div id="posts-container">
- <% for (Post post : posts) { %>
-        <div class="posts">
-            <div class="post-title">
-                <div class="post-left">
-                    <div class="image">
-                        <img src="img/profileicon.png" alt="Profile Icon" width="35" height="35">
-                    </div>
-                    <div class="details">
-                        <p class="name"><%= post.getUsername() %></p>
-                        <p><%= post.getTimestamp() %></p>
-                    </div>
-                </div>
+	<div id="posts-container">
+		<% for (Post post : posts) { %>
+		<div class="posts">
+			<div class="post-title">
+				<div class="post-left">
+					<div class="image">
+						<img src="img/profileicon.png" alt="Profile Icon" width="35"
+							height="35">
+					</div>
+					<div class="details">
+						<p class="name"><%= post.getUsername() %></p>
+						<p><%= post.getTimestamp() %></p>
+					</div>
+				</div>
 				<div class="post-right">
 					<i class="fa-solid fa-ellipsis" onclick="toggleDeleteOption(this)"></i>
-					<div class="delete-option" style="display: none;">
+					<div class="delete-option">
 						<form action="deletePost" method="get">
-							<input type="hidden" name="id" value="<%=post.getId()%>">
+							<input type="hidden" name="id" value="<%= post.getId() %>">
 							<button type="submit">Delete</button>
 						</form>
 					</div>
 				</div>
-				<script>
-				function toggleDeleteOption(element) {
-				    const deleteOption = element.nextElementSibling;
-				    if (deleteOption.style.display === 'none' || deleteOption.style.display === '') {
-				        deleteOption.style.display = 'block';
-				    } else {
-				        deleteOption.style.display = 'none';
-				    }
-				}
-
-				</script>
 			</div>
-            <div class="post-content">
-                <img src="data:image/jpg;base64,<%= Base64.getEncoder().encodeToString(post.getImage()) %>" alt="Post Content">
-                <p><%= post.getDescription() %></p>
-            </div>
-            <%
-    // Assuming 'post' is available in the request scope
-    Integer userId = (Integer) session.getAttribute("userid");
-    if (userId == null) {
-        userId = -1; // Default value or handle unauthenticated user case
-    }
-%>
-
-<div class="post-footer">
-    <div class="like-share-comment">
-        <div id="post-<%= post.getId() %>" class="post">
-            <i class="fa-regular fa-heart" onclick="toggleLike(<%= post.getId() %>, <%= userId %>)"></i>
-            <span id="like-count-<%= post.getId() %>">0</span> likes
-        </div>
-    </div>
-</div>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script>
-    function toggleLike(postId, userId) {
-        console.log("toggleLike called with postId:", postId, "userId:", userId);
-        console.log("hello");
-        const heartIcon = $(`#post-${postId} .fa-heart`);
-        const likeCountSpan = $(`#like-count-${postId}`);
-        const isLiked = heartIcon.hasClass('fa-solid');
-        
-        $.ajax({
-            url: 'LikeServlet',
-            type: 'POST',
-            data: {
-                userId: userId,
-                postId: postId,
-                isLiked: !isLiked
-            },
-            success: function(response) {
-                likeCountSpan.text(response.likeCount);
-                heartIcon.toggleClass('fa-solid', !isLiked);
-                heartIcon.toggleClass('fa-regular', isLiked);
+			<div class="post-content">
+				<img
+					src="data:image/jpg;base64,<%= Base64.getEncoder().encodeToString(post.getImage()) %>"
+					alt="Post Content">
+				<p><%= post.getDescription() %></p>
+			</div>
+			<div class="post-footer">
+				<div class="like-share-comment">
+					<div id="post-<%= post.getId() %>" class="post">
+						<i class="fa-regular fa-heart"
+							onclick="toggleLike(<%=post.getId()%>, <%=userId%>)"></i> <span
+							id="like-count-<%=post.getId()%>"><%=post.getLikeCount()%></span>
+						likes
+					</div>
+				</div>
+			</div>
+			<div class="add-comment">
+				<div class="left-side">
+					<input type="text" id="comment-input-<%=post.getId()%>"
+						placeholder="Add a comment...">
+				</div>
+				<div class="right-side">
+					<button type="button"
+						onclick="addComment(<%=post.getId()%>, <%=userId%>)">Post</button>
+				</div>
+			</div>
+		</div>
+		<%
+		}
+		%>
+	</div>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        function toggleDeleteOption(element) {
+            const deleteOption = element.nextElementSibling;
+            if (deleteOption.style.display === 'none' || deleteOption.style.display === '') {
+                deleteOption.style.display = 'block';
+            } else {
+                deleteOption.style.display = 'none';
             }
-        });
-    }
-</script>
+        }
 
-                    <i class="fa-regular fa-comment"></i>
-                </div>
-            </div>
-            <div class="add-comment">
-                <div class="left-side">
-                    <input type="text" placeholder="Add a comment...">
-                </div>
-                <div class="right-side">
-                    <p>Post</p>
-                </div>
-            </div>
-        </div>
-    <% } %>
-</div>
+        function toggleLike(postId, userId) {
+            console.log("toggleLike called with postId:", postId, "userId:", userId);
+            console.log("hello");
+            const heartIcon = $(`#post-${postId} .fa-heart`);
+            const likeCountSpan = $(`#like-count-${postId}`);
+            const isLiked = heartIcon.hasClass('fa-solid');
+
+            $.ajax({
+                url: 'LikeServlet',
+                type: 'POST',
+                data: {
+                    userId: userId,
+                    postId: postId,
+                    isLiked: !isLiked
+                },
+                success: function(response) {
+                    likeCountSpan.text(response.likeCount);
+                    heartIcon.toggleClass('fa-solid', !isLiked);
+                    heartIcon.toggleClass('fa-regular', isLiked);
+                },
+                error: function(xhr, status, error) {
+                    console.error("AJAX request failed: ", status, error);
+                }
+            });
+        }
+    </script>
 </body>
 </html>
