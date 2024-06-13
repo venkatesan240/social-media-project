@@ -87,7 +87,7 @@ public class UpdateProfile extends HttpServlet {
 			e.printStackTrace();
 		}
 		request.setAttribute("updateMessage", "Profile updated successfully");
-		 request.getRequestDispatcher("header.jsp").forward(request, response);
+		 request.getRequestDispatcher("home.jsp").forward(request, response);
 	}
 
 }

@@ -160,6 +160,20 @@
 .delete-option button:hover {
     background-color: #c0392b;
 }
+/* Updated CSS for profile image in posts */
+.posts .image {
+    width: 50px; /* Adjust as needed */
+    height: 50px; /* Adjust as needed */
+    overflow: hidden;
+    border-radius: 50%;
+    margin-right: 15px; /* Adjust spacing as needed */
+}
+
+.posts .image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
 </style>
 </head>
 <body>
@@ -168,15 +182,17 @@
  <% for (Post post : posts) { %>
         <div class="posts">
             <div class="post-title">
-                <div class="post-left">
-                    <div class="image">
-                        <img src="img/profileicon.png" alt="Profile Icon" width="35" height="35">
-                    </div>
-                    <div class="details">
-                        <p class="name"><%= post.getUsername() %></p>
-                        <p><%= post.getTimestamp() %></p>
-                    </div>
-                </div>
+				<div class="post-left">
+					<div class="image">
+					<a href="profile.jsp">
+						<img src="data:image/jpeg;base64,<%= base64Image %>" alt="Profile Image">
+						</a>
+					</div>
+					<div class="details">
+						<p class="name"><%=post.getUsername()%></p>
+						<p><%=post.getTimestamp()%></p>
+					</div>
+				</div>
 				<div class="post-right">
 					<i class="fa-solid fa-ellipsis" onclick="toggleDeleteOption(this)"></i>
 					<div class="delete-option" style="display: none;">

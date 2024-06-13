@@ -7,7 +7,6 @@
     UserDAO userDAO = new UserDAO();
     String base64Image = "";
 
-    System.out.println(session.getAttribute("userid"));
     User user = userDAO.getUserById((Integer)(session.getAttribute("userid")));
     if (user != null && user.getProfile() != null) {
         //System.out.println("user null");

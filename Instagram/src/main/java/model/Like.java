@@ -59,5 +59,10 @@ public class Like {
 	public void setCreatedat(String createdat) {
 		this.createdat = createdat;
 	}
+
+	public boolean isLiked() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 	
 }

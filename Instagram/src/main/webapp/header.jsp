@@ -20,9 +20,9 @@
 <head>
 <meta charset="ISO-8859-1">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>page</title>
+<title>Page</title>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" /> 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"> 
 <style>
 @charset "ISO-8859-1";
 * {
@@ -70,7 +70,6 @@ header nav ul {
 header nav ul li {
     margin-right: 60px;
     padding: 5px;
-    
 }
 header nav ul li a {
     display: flex;
@@ -135,12 +134,9 @@ img {
             <img src="img/connect-high-resolution-logo-black.png" alt="insta">
         </div>
         <div class="search-box">
-            
           <input type="search" id="searchBox" placeholder="Search" oninput="searchUsers()">
           <i class="fa-solid fa-magnifying-glass" onclick="searchUsers()"></i>
-<div id="searchResults"></div>
-
-           
+          <div id="searchResults"></div>
         </div>
         <% 
         // Check if there's an error message
@@ -153,30 +149,30 @@ img {
         <%
         }
         %>
-        <nav>
-            <ul>
-                <li><a href="home.jsp"><i class="fa-solid fa-house"></i></a></li>
-                <li><a href="${pageContext.request.contextPath}/userlistservlet"><i class="fa-solid fa-message"></i></a></li>
-                <li><a href="post.jsp"><i class="fa-solid fa-square-plus"></i></a></li>
-                <li><a href="#"><i class="fa-solid fa-heart"></i></a></li>
-                <li class="nav-item profile-icon">
-                    <a href="profile.jsp">
-                        <img src="data:image/jpeg;base64,<%= base64Image %>" alt="Profile Image">
-                    </a>
-                    <div class="dropdown-content">
-                        <div class="name">
-                            <a><%= session.getAttribute("name") %></a>
-                        </div>
-                        <a href="logout">Logout</a>
-                        <a href="profile.jsp">Profile</a>
+       <nav>
+        <ul>
+            <li><a href="home.jsp"><i class="fa-solid fa-house nav-icon"></i></a></li>
+            <li><a href="${pageContext.request.contextPath}/userlistservlet"><i class="fa-solid fa-message nav-icon"></i></a></li>
+            <li><a href="post.jsp"><i class="fa-solid fa-square-plus nav-icon"></i></a></li>
+            <li><a href="#"><i class="fa-solid fa-heart nav-icon"></i></a></li>
+            <li class="nav-item profile-icon">
+                <a href="profile.jsp">
+                    <img src="data:image/jpeg;base64,<%= base64Image %>" alt="Profile Image">
+                </a>
+                <div class="dropdown-content">
+                    <div class="name">
+                        <a><%= session.getAttribute("name") %></a>
                     </div>
-                </li>
-            </ul>
-        </nav>
+                    <a href="logout">Logout</a>
+                    <a href="profile.jsp">Profile</a>
+                </div>
+            </li>
+        </ul>
+    </nav>
     </header>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 <script>
@@ -205,3 +201,4 @@ function searchUsers() {
 </script>
 </body>
 </html>
+

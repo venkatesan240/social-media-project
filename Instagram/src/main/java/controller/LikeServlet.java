@@ -1,5 +1,6 @@
 package controller;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -11,7 +12,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONObject;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+
 import dao.LikeDAO;
+import model.LikeRequest;
 
 
 @WebServlet("/LikeServlet")
@@ -31,14 +36,20 @@ public class LikeServlet extends HttpServlet {
 
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		int userId = Integer.parseInt(request.getParameter("userId"));
-        int postId = Integer.parseInt(request.getParameter("postId"));
-        boolean isLiked = Boolean.parseBoolean(request.getParameter("isLiked"));
-        System.out.println("userid"+userId);
-        System.out.println("postId"+postId);
-        System.out.println("isLiked"+isLiked);
-        LikeDAO likeDAO = new LikeDAO();
+		BufferedReader reader = request.getReader();
+        Gson gson = new Gson();
+
         try {
+            // Parse JSON to LikeRequest object
+            LikeRequest likeRequest = gson.fromJson(reader, LikeRequest.class);
+
+            // Extract values from likeRequest
+            int userId = likeRequest.getUserId();
+            int postId = likeRequest.getPostId();
+            boolean isLiked = likeRequest.isLiked();
+
+            // Process like logic using LikeDAO or any other service
+            LikeDAO likeDAO = new LikeDAO();
             if (isLiked) {
                 likeDAO.addLike(userId, postId);
             } else {
@@ -46,21 +57,21 @@ public class LikeServlet extends HttpServlet {
             }
 
             int likeCount = likeDAO.getLikeCount(postId);
-            System.out.println("likecount"+likeCount);
 
+            // Prepare JSON response
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
 
-            JSONObject jsonResponse = new JSONObject();
-            jsonResponse.put("likeCount", likeCount);
-
             PrintWriter out = response.getWriter();
-            out.print(jsonResponse.toString());
+            out.print("{\"likeCount\":" + likeCount + "}");
             out.flush();
+        } catch (JsonSyntaxException e) {
+            e.printStackTrace();
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST); // Bad JSON format
         } catch (Exception e) {
             e.printStackTrace();
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR); // Other errors
         }
-
 	}
 	
 
