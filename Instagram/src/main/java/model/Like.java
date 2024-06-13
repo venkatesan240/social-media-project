@@ -6,6 +6,7 @@ public class Like {
 	private int postid;
 	private int userid;
 	private String createdat;
+	private int likecount;
 	
 	public Like() {
 		super();
@@ -17,6 +18,14 @@ public class Like {
 		this.postid = postid;
 		this.userid = userid;
 		this.createdat = createdat;
+	}
+
+	public int getLikecount() {
+		return likecount;
+	}
+
+	public void setLikecount(int likecount) {
+		this.likecount = likecount;
 	}
 
 	public int getLikeid() {

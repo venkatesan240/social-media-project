@@ -38,7 +38,6 @@ public class LikeServlet extends HttpServlet {
         System.out.println("postId"+postId);
         System.out.println("isLiked"+isLiked);
         LikeDAO likeDAO = new LikeDAO();
-
         try {
             if (isLiked) {
                 likeDAO.addLike(userId, postId);
