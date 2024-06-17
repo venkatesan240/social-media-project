@@ -147,8 +147,6 @@ main {
 <%
     }
 %>
-				<!-- <p id="or">or</p> -->
-                <!-- <a href="#" class="fb-login"><i class='bx bxl-facebook-square'></i>Log in with Facebook</a> -->
             </form>
             <div class="get-app">
                 <p>Get the app</p>

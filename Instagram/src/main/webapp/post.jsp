@@ -6,6 +6,8 @@
 <%@ page import="dao.PostDAO" %>
 <%@ page import="model.Post" %>
 <%@ page import="java.util.ArrayList" %>
+<%@ page import="model.Comment" %>
+<%@ page import="dao.commentDAO" %>
 <%
     PostDAO postDAO = new PostDAO();
     List<Post> posts = new ArrayList<>();
@@ -24,7 +26,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Instagram-like Post</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
     body {
             font-family: Arial, sans-serif;
@@ -198,42 +201,99 @@
         .delete-option button:hover {
             background-color: #c0392b;
         }
-        .modal {
-            display: none; 
-            position: fixed; 
-            z-index: 1000; 
-            left: 0;
-            top: 0;
-            width: 100%; 
-            height: 100%; 
-            overflow: auto; 
-            background-color: rgb(0,0,0); 
-            background-color: rgba(0,0,0,0.4); 
-        }
+       /* Modal container */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+    justify-content: center;  /* Center horizontally */
+    align-items: center;  /* Center vertically */
+    display: flex;
+}
 
-        .modal-content {
-            background-color: #fefefe;
-            margin: 15% auto; 
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-            max-width: 500px;
-            border-radius: 10px;
-        }
+/* Modal content */
+.modal-content {
+    background-color: #fefefe;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    position: relative; /* To position the close button correctly */
+}
 
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-        }
+/* Close button */
+.close {
+    color: #aaa;
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
 
-        .close:hover,
-        .close:focus {
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
-        }
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+}
+
+/* Comments container */
+#commentsContainer {
+    max-height: 200px;
+    overflow-y: auto;
+    margin-bottom: 20px;
+    border-top: 1px solid #ddd;
+    padding-top: 10px;
+}
+
+#commentsContainer a {
+    display: block;
+    padding: 5px 0;
+    border-bottom: 1px solid #eee;
+}
+
+#commentsContainer a:last-child {
+    border-bottom: none;
+}
+
+/* Form */
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 3px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: none;
+}
+
+button {
+    align-self: flex-end;
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #218838;
+}
+
     </style>
 </head>
 <body>
@@ -274,40 +334,63 @@
                         </div>
                     </div>
                 </div>
+                <script>
+				function toggleDeleteOption(element) {
+				    const deleteOption = element.nextElementSibling;
+				    if (deleteOption.style.display === 'none' || deleteOption.style.display === '') {
+				        deleteOption.style.display = 'block';
+				    } else {
+				        deleteOption.style.display = 'none';
+				    }
+				}
+				</script>
                 <div class="post-content">
                     <img src="data:image/jpg;base64,<%= Base64.getEncoder().encodeToString(post.getImage()) %>" alt="Post Content">
                     <p><%= post.getDescription() %></p>
                 </div>
                 <div class="post-footer">
-                    <div class="like-share-commant">
-                        <i class="fa-regular fa-heart like-button" onclick="toggleLike(<%= post.getId() %>, <%= userId %>)"></i>
-                        <span id="like-count-<%= post.getId() %>"><%= post.getLikeCount() %></span> likes
-                    </div>
-                    <i class="fa-regular fa-comment" onclick="openCommentModal(<%= post.getId() %>)"></i>
+				<div class="like-share-comment">
+					<i id="like-button-<%=post.getId()%>"
+						class="fa-regular fa-heart like-button"
+						onclick="toggleLike(<%=post.getId()%>, <%=userId%>)"></i> 
+						<span	id="like-count-<%=post.getId()%>"><%=post.getLikeCount()%></span>
+					likes
+				</div>
+				<i class="fa-regular fa-comment" onclick="openCommentModal(<%= post.getId() %>)"></i>
                 </div>
-                <div class="add-comment">
+                <!-- <div class="add-comment">
                     <div class="left-side">
                         <input type="text" placeholder="Add a comment...">
                     </div>
                     <div class="right-side">
                         <p class="text-primary mb-0">Post</p>
                     </div>
-                </div>
-            </div>
-       
+                </div> -->
+            </div>      
     </div>
     <!-- Comment Modal -->
     <div id="commentModal" class="modal">
         <div class="modal-content">
 			<span class="close">&times;</span>
 			<h3>Comments</h3>
-			<div id="commentsContainer"></div>
-			<form action="CommentServlet" method="get">
+			<div id="commentsContainer">
+					<% 
+					List<Comment> comments = null;
+					try {
+						comments = commentDAO.getCommentsByPostId(post.getId());
+					} catch (ClassNotFoundException e) {
+						e.printStackTrace();
+					}
+					for(Comment comment:comments){ %>
+					<a><strong><%= new UserDAO().getUserById(comment.getUserid()).getFirst_name() %></strong>: <%= comment.getComment() %></a>
+					<%} %>			
+			</div>
+			<form action="CommentServlet" method="post">
 				<textarea id="newComment" rows="3" name="comment"
 					placeholder="Add a comment..."></textarea>
 				<input type="hidden" name="userid" value="<%=userId%>" /> <input
 					type="hidden" name="postid" value="<%=post.getId()%>" />
-				<button id="submitComment">Post Comment</button>
+				<button  id="submitComment">Post Comment</button>
 			</form>
 		</div>
     </div>
@@ -318,13 +401,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <script>
-        // Get the modal
+
         var modal = document.getElementById("commentModal");
 
-        // Get the <span> element that closes the modal
         var span = document.getElementsByClassName("close")[0];
-
-        // When the user clicks the button, open the modal 
+ 
         function openCommentModal(postId) {
             modal.style.display = "block";
             fetchComments(postId);
@@ -333,12 +414,10 @@
             };
         }
 
-        // When the user clicks on <span> (x), close the modal
         span.onclick = function() {
             modal.style.display = "none";
         }
 
-        // When the user clicks anywhere outside of the modal, close it
         window.onclick = function(event) {
             if (event.target == modal) {
                 modal.style.display = "none";
@@ -347,41 +426,42 @@
     </script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
-    function toggleLike(postId, userId) {
-        console.log("toggleLike called with postId:", postId, "userId:", userId);
-        const heartIcon = $(`#post-${postId} .fa-heart`);
-        const likeCountSpan = $(`#like-count-${postId}`);
-        const isLiked = heartIcon.hasClass('fa-solid');
+        function toggleLike(postId, userId) {
+            console.log("toggleLike called with postId:", postId, "userId:", userId);
+            const heartIcon = $(`#like-button-${postId}`);
+            const likeCountSpan = $(`#like-count-${postId}`);
+            const isLiked = heartIcon.hasClass('fa-solid');
 
-        console.log("Current like state:", isLiked);
+            console.log("Current like state:", isLiked);
 
-        $.ajax({
-            url: 'LikeServlet',
-            type: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify({
-                userId: userId,
-                postId: postId,
-                isLiked: !isLiked
-            }),
-            success: function(response) {
-                console.log("AJAX success response:", response);
-                if (response && response.likeCount !== undefined) {
-                    likeCountSpan.text(response.likeCount); // Update the like count in the span
-                    if (!isLiked) {
-                        heartIcon.removeClass('fa-regular').addClass('fa-solid');
+            $.ajax({
+                url: 'LikeServlet',
+                type: 'POST',
+                contentType: 'application/json',
+                cache: false, 
+                data: JSON.stringify({
+                    userId: userId,
+                    postId: postId,
+                    isLiked: !isLiked
+                }),
+                success: function(response) {
+                    console.log("AJAX success response:", response);
+                    if (response && response.likeCount !== undefined) {
+                        likeCountSpan.text(response.likeCount); 
+                        if (!isLiked) {
+                            heartIcon.removeClass('fa-regular').addClass('fa-solid');
+                        } else {
+                            heartIcon.removeClass('fa-solid').addClass('fa-regular');
+                        }
                     } else {
-                        heartIcon.removeClass('fa-solid').addClass('fa-regular');
+                        console.error("Invalid response format:", response);
                     }
-                } else {
-                    console.error("Invalid response format:", response);
+                },
+                error: function(xhr, status, error) {
+                    console.error("AJAX request failed: ", status, error);
                 }
-            },
-            error: function(xhr, status, error) {
-                console.error("AJAX request failed: ", status, error);
-            }
-        });
-    }
-</script>
+            });
+        }
+    </script>
 </body>
 </html>

@@ -48,15 +48,14 @@ public class UserDAO {
 	        return false;
 	}
 
-	public void updateUser(User user,String email1) throws SQLException, ClassNotFoundException {
-		String updateQuery="update user set first_name=?,last_name=?,email=?,password=?,profile=? where email=?";
+	public void updateUser(User user,int userid) throws SQLException, ClassNotFoundException {
+		String updateQuery="update user set first_name=?,last_name=?,email=?,profile=? where user_id=?";
 		PreparedStatement ps=db.getConnection().prepareStatement(updateQuery);
 		ps.setString(1,user.getFirst_name());
 		ps.setString(2,user.getLast_name());
 		ps.setString(3,user.getEmail());
-		ps.setString(4,user.getPassword());
-		ps.setBytes(5,user.getProfile());
-		ps.setString(6,email1);
+		ps.setBytes(4,user.getProfile());
+		ps.setInt(5,userid);
 		ps.executeUpdate();
 	}
 	

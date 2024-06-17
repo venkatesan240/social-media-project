@@ -81,6 +81,7 @@ a p:hover {
         <p>Username: <%= user.getFirst_name() %></p>
         <p>Email: <%= user.getEmail() %></p>
        <a href="update.jsp"><p>Edit profile</p></a>
+       <a href="logout"><p>Logout</p></a>
      </div>
 </body>
 </html>

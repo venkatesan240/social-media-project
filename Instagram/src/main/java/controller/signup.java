@@ -22,14 +22,12 @@ public class signup extends HttpServlet {
      */
     public signup() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
@@ -37,7 +35,6 @@ public class signup extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		String firstname = request.getParameter("first-name");
 		String  lastname = request.getParameter("last-name");
 		String  email = request.getParameter("email");
@@ -76,10 +73,8 @@ public class signup extends HttpServlet {
 		    status = false;
 		}
 		if(!status) {
-		//	request.setAttribute("page", "register");
 			request.getRequestDispatcher("signup.jsp").forward(request, response);
 		} else {
-			//UserDAO userDAO = new UserDAO();
 			User user = new User();
 			user.setPassword(password);
 			user.setFirst_name(firstname);
@@ -89,7 +84,6 @@ public class signup extends HttpServlet {
 			try {
 				result = UserDAO.register(user);
 			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			if(result.equals("Registration Successful.")) {

@@ -68,6 +68,7 @@ try {
 </style>
 </head>
 <body>
+<%@include file="header.jsp" %>
 <div class="container">
     <%
         if (messages != null && messages.size() == 0) {
@@ -84,7 +85,7 @@ try {
                     <div class="row justify-content-end">
                         <div class="col-8 alert alert-primary" role="alert">
                             <h5>
-                                me <a href="${pageContext.request.contextPath}/view-message?id=<%= senderId %>&delete=<%= message.getId() %>" class="card-link" style="float: right;"><i style="color: red;" class="far fa-trash-alt"></i></a>
+                                me <%-- <a href="${pageContext.request.contextPath}/ChatServlet?id=<%= senderId %>&delete=<%= message.getId() %>" class="card-link" style="float: right;"><i style="color: red;" class="far fa-trash-alt"></i></a> --%>
                             </h5>
                             <%= message.getMessage() %>
                             <p style="text-align: right;"><%= message.getTimestamp() %></p>
@@ -96,7 +97,7 @@ try {
                     <div class="row justify-content-start">
                         <div class="col-8 alert alert-secondary" role="alert">
                             <h5>
-                                <%= new UserDAO().getUserById(message.getReceiverId()).getFirst_name() %> <a href="${pageContext.request.contextPath}/view-message?id=<%= request.getAttribute("receiverId") %>&delete=<%= message.getId() %>" class="card-link" style="float: right;"><i style="color: red;" class="far fa-trash-alt"></i></a>
+                                <%= new UserDAO().getUserById(message.getSenderId()).getFirst_name() %> <%-- <a href="${pageContext.request.contextPath}/ChatServlet?id=<%= request.getAttribute("receiverId") %>&delete=<%= message.getId() %>" class="card-link" style="float: right;"><i style="color: red;" class="far fa-trash-alt"></i></a> --%>
                             </h5>
                             <%= message.getMessage() %>
                             <p style="text-align: right;"><%= message.getTimestamp() %></p>

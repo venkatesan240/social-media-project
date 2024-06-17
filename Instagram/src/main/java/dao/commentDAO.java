@@ -10,7 +10,7 @@ import model.Comment;
 import util.DbConnection;
 
 public class commentDAO {
-	 private static final String INSERT_COMMENT = "INSERT INTO comments (post_id,user_id, content,created_at ) VALUES (?, ?, ?, ?)";
+	 private static final String INSERT_COMMENT = "INSERT INTO comments (post_id,user_id, content) VALUES (?, ?, ?)";
 	    private static final String SELECT_COMMENTS_BY_POST_ID = "SELECT * FROM comments WHERE post_id = ? ORDER BY created_at DESC";
 	
 	static DbConnection db=new DbConnection();
@@ -20,9 +20,7 @@ public class commentDAO {
             
             stmt.setInt(1, comment.getPostid());
             stmt.setInt(2, comment.getUserid());
-            stmt.setString(3, comment.getComment());
-            stmt.setString(4, comment.getComment());
-            
+            stmt.setString(3, comment.getComment());  
             stmt.executeUpdate();
             
         } catch (SQLException e) {
@@ -41,7 +39,7 @@ public class commentDAO {
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                int id = rs.getInt("id");
+                int id = rs.getInt("comment_id");
                 int userid = rs.getInt("user_id");
                 String commentText = rs.getString("content");
                 String timestamp = rs.getString("created_at");

@@ -1,19 +1,13 @@
 package controller;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-import com.google.gson.Gson;
 
 import dao.MessageDAO;
 import dao.UserDAO;
@@ -34,21 +28,21 @@ public class ChatServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		 response.setContentType("application/json");
-	        PrintWriter out = response.getWriter();
-	        HttpSession session = request.getSession();
-	       
-			//System.out.println("send ----> " + senderId);
-			//session.setAttribute("userid",senderId);
-			
-	        //out.print(new Gson().toJson(message));
+	        if(request.getParameter("delete") != null) {
+	        	int id=Integer.parseInt(request.getParameter("delete"));
+				try {
+					msgdao.deleteMessage(id);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+	        request.getRequestDispatcher("viewmessage.jsp").forward(request, response);
+
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//doGet(request, response);
 		 int senderId = Integer.parseInt(request.getParameter("senderId"));
 	        int receiverId = Integer.parseInt(request.getParameter("receiverId"));
-	        System.out.println("senderid----"+senderId);
-	        System.out.println("receiverId----"+receiverId);
 	        msg.setSenderId(senderId);
 	        msg.setReceiverId(receiverId);
 	        ArrayList<Message> messages = new ArrayList<>();
@@ -59,10 +53,6 @@ public class ChatServlet extends HttpServlet {
 			}
 			request.setAttribute("messages",messages);
         String message1 = request.getParameter("message");
-       
-        //System.out.println("SenderID ---> " + senderId);
-        //System.out.println("ReceiverID ---> " + receiverId);
-   
         msg.setSenderId(senderId);
         msg.setReceiverId(receiverId);
         msg.setMessage(message1);

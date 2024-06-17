@@ -21,7 +21,6 @@ public class DeletePost extends HttpServlet {
      */
     public DeletePost() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
 	/**
@@ -29,9 +28,7 @@ public class DeletePost extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		 String postId = request.getParameter("id");
-		// System.out.println("print");
 	        if (postId != null) {
-	        	//System.out.println("Received request to delete post with ID: " + postId);
 	            PostDAO postDAO = new PostDAO();
 	            boolean deleted = false;
 				try {

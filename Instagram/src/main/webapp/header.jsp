@@ -140,11 +140,11 @@ img {
         </div>
         <% 
         // Check if there's an error message
-        String message = (String) request.getAttribute("updateMessage");
-        if (message != null) {
+        String message1 = (String) request.getAttribute("updateMessage");
+        if (message1 != null) {
         %>
             <script type="text/javascript">
-                alert("<%= message %>");
+                alert("<%= message1 %>");
             </script>
         <%
         }

@@ -50,4 +50,17 @@ public class LikeDAO {
         }
         return 0;
     }
+    public boolean isLikedByUser(int userId, int postId) throws SQLException, ClassNotFoundException {
+        String query = "SELECT COUNT(*) FROM likes WHERE user_id = ? AND post_id = ?";
+        try (PreparedStatement stmt = db.getConnection().prepareStatement(query)) {
+            stmt.setInt(1, userId);
+            stmt.setInt(2, postId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        }
+        return false;
+    }
 }

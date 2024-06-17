@@ -51,17 +51,14 @@ public class UpdateProfile extends HttpServlet {
 	        response.sendRedirect("signin.jsp");
 	        return;
 	    }
-	    String email = (String) session.getAttribute("email");
-	    if (email == null) {
+	    int userid = (Integer) session.getAttribute("userid");
+	    if (userid == 0) {
 	        response.sendRedirect("signin.jsp");
 	        return;
 	    } 
-	    System.out.println(email);
 		String  fname = request.getParameter("first-name");
 		String  lname = request.getParameter("last-name");
 		String  email1 = request.getParameter("email");
-		String  password = request.getParameter("password");
-		String  cpassword = request.getParameter("confirm-password");
 		Part part=request.getPart("profile-image");
 		InputStream is=null;
 		byte[] data = null;
@@ -71,16 +68,19 @@ public class UpdateProfile extends HttpServlet {
 			is.read(data);
 			 is.close();
 		}
+		
 		User user=new User();
 		user.setFirst_name(fname);
 		user.setLast_name(lname);
 		user.setEmail(email1);
-		user.setPassword(password);
-		user.setConfirmpassword(cpassword);
 		user.setProfile(data);
+		System.out.println("first name"+user.getFirst_name());
+		System.out.println("last name"+user.getLast_name());
+		System.out.println("email1"+user.getEmail());
+		System.out.println("image"+user.getProfile());
 		UserDAO userdao=new UserDAO();
 		try {
-			userdao.updateUser(user,email1);
+			userdao.updateUser(user,userid);
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {

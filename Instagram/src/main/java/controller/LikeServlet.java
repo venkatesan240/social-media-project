@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.JSONObject;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 
 import dao.LikeDAO;
@@ -36,19 +37,11 @@ public class LikeServlet extends HttpServlet {
 
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		BufferedReader reader = request.getReader();
-        Gson gson = new Gson();
+		try {
+            int userId = Integer.parseInt(request.getParameter("userId"));
+            int postId = Integer.parseInt(request.getParameter("postId"));
+            boolean isLiked = Boolean.parseBoolean(request.getParameter("isLiked"));
 
-        try {
-            // Parse JSON to LikeRequest object
-            LikeRequest likeRequest = gson.fromJson(reader, LikeRequest.class);
-
-            // Extract values from likeRequest
-            int userId = likeRequest.getUserId();
-            int postId = likeRequest.getPostId();
-            boolean isLiked = likeRequest.isLiked();
-
-            // Process like logic using LikeDAO or any other service
             LikeDAO likeDAO = new LikeDAO();
             if (isLiked) {
                 likeDAO.addLike(userId, postId);
@@ -56,23 +49,11 @@ public class LikeServlet extends HttpServlet {
                 likeDAO.removeLike(userId, postId);
             }
 
-            int likeCount = likeDAO.getLikeCount(postId);
-
-            // Prepare JSON response
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-
-            PrintWriter out = response.getWriter();
-            out.print("{\"likeCount\":" + likeCount + "}");
-            out.flush();
-        } catch (JsonSyntaxException e) {
-            e.printStackTrace();
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST); // Bad JSON format
+            // Redirect back to the same page with updated like count
+            response.sendRedirect("post.jsp?postId=" + postId);
         } catch (Exception e) {
             e.printStackTrace();
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR); // Other errors
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
 	}
-	
-
 }

@@ -4,6 +4,8 @@
     <%@ page import="dao.PostDAO" %>
     <%@ page import="model.Post" %>
     <%@ page import="java.util.List" %>
+    <%@ page import="model.Comment" %>
+<%@ page import="dao.commentDAO" %>
     <%
     PostDAO postDAO = new PostDAO();
     List<Post> posts = new ArrayList<>();
@@ -13,6 +15,9 @@
         e.printStackTrace();
     }
 %>
+<% 
+        int userId = (int) session.getAttribute("userid");
+        %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -174,6 +179,82 @@
     height: 100%;
     object-fit: cover;
 }
+/* Modal content */
+.modal-content {
+    background-color: #fefefe;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    position: relative; /* To position the close button correctly */
+}
+
+/* Close button */
+.close {
+    color: #aaa;
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+}
+
+/* Comments container */
+#commentsContainer {
+    max-height: 200px;
+    overflow-y: auto;
+    margin-bottom: 20px;
+    border-top: 1px solid #ddd;
+    padding-top: 10px;
+}
+
+#commentsContainer a {
+    display: block;
+    padding: 5px 0;
+    border-bottom: 1px solid #eee;
+}
+
+#commentsContainer a:last-child {
+    border-bottom: none;
+}
+
+/* Form */
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 3px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: none;
+}
+
+button {
+    align-self: flex-end;
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #218838;
+}
 </style>
 </head>
 <body>
@@ -218,28 +299,77 @@
                 <img src="data:image/jpg;base64,<%= Base64.getEncoder().encodeToString(post.getImage()) %>" alt="Post Content">
                 <p><%= post.getDescription() %></p>
             </div>
-            <div class="post-footer">
-                <div class="like-share-commant" onclick="toggleLike(this)">
-                 <i class="fa-regular fa-heart" ></i>
-
-<script>
-    function toggleLike(button) {
-        button.classList.toggle('liked'); // Toggle the 'liked' class
-    }
-</script>
-                    <i class="fa-regular fa-comment"></i>
+             <div class="post-footer">
+                    <div class="like-share-commant">
+                        <i class="fa-regular fa-heart like-button" onclick="toggleLike(<%= post.getId() %>, <%= userId %>)"></i>
+                        <span id="like-count-<%= post.getId() %>"><%= post.getLikeCount() %></span> likes
+                    </div>
+                    <i class="fa-regular fa-comment" onclick="openCommentModal(<%= post.getId() %>)"></i>
                 </div>
-            </div>
-            <div class="add-comment">
-                <div class="left-side">
-                    <input type="text" placeholder="Add a comment...">
-                </div>
-                <div class="right-side">
-                    <p>Post</p>
-                </div>
-            </div>
+                <!-- <div class="add-comment">
+                    <div class="left-side">
+                        <input type="text" placeholder="Add a comment...">
+                    </div>
+                    <div class="right-side">
+                        <p class="text-primary mb-0">Post</p>
+                    </div>
+                </div> -->
         </div>
+         <!-- Comment Modal -->
+    <div id="commentModal" class="modal">
+        <div class="modal-content">
+			<span class="close">&times;</span>
+			<h3>Comments</h3>
+			<div id="commentsContainer">
+					<% 
+					List<Comment> comments = null;
+					try {
+						comments = commentDAO.getCommentsByPostId(post.getId());
+					} catch (ClassNotFoundException e) {
+						e.printStackTrace();
+					}
+					for(Comment comment:comments){ %>
+					<a><strong><%= new UserDAO().getUserById(comment.getUserid()).getFirst_name() %></strong>: <%= comment.getComment() %></a>
+					<%} %>			
+			</div>
+			<form action="CommentServlet" method="post">
+				<textarea id="newComment" rows="3" name="comment"
+					placeholder="Add a comment..."></textarea>
+				<input type="hidden" name="userid" value="<%=userId%>" /> <input
+					type="hidden" name="postid" value="<%=post.getId()%>" />
+				<button  id="submitComment">Post Comment</button>
+			</form>
+		</div>
+    </div>
     <% } %>
 </div>
+<script>
+        // Get the modal
+        var modal = document.getElementById("commentModal");
+
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+
+        // When the user clicks the button, open the modal 
+        function openCommentModal(postId) {
+            modal.style.display = "block";
+            fetchComments(postId);
+            document.getElementById("submitComment").onclick = function() { 
+            	submitComment(postId); 
+            };
+        }
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }       
+    </script>
 </body>
 </html>

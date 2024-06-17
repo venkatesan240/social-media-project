@@ -25,49 +25,27 @@ public class CommentServlet extends HttpServlet {
         super();
 
     }
-
+    Comment comment=new Comment();
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		 int postId = Integer.parseInt(request.getParameter("postId"));
-		 int userid = Integer.parseInt(request.getParameter("userid"));
-	        List<Comment> comments = null;
-			try {
-				comments = commentDAO.getCommentsByPostId(postId);
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			}
-
-	        // Convert comments to HTML or JSON response and send back to client
-	        // Example: write JSON response
-	        Gson gson = new Gson();
-	        String json = gson.toJson(comments);
 
 	        response.setContentType("application/json");
 	        response.setCharacterEncoding("UTF-8");
-	        response.getWriter().write(json);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		BufferedReader reader = request.getReader();
-        StringBuilder sb = new StringBuilder();
-        String line;
-        while ((line = reader.readLine()) != null) {
-            sb.append(line);
-        }
-
-        String jsonString = sb.toString();
-        Gson gson = new Gson();
-        Comment comment = gson.fromJson(jsonString, Comment.class);
-
-        // Set timestamp for the new comment
-
-        // Add comment using DAO
+		 int postId = Integer.parseInt(request.getParameter("postid"));
+		 int userid = Integer.parseInt(request.getParameter("userid"));
+		 String comment1=request.getParameter("comment");
+		 comment.setPostid(postId);
+		 comment.setUserid(userid);
+		 comment.setComment(comment1);
         try {
 			commentDAO.addComment(comment);
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
-
+        request.getRequestDispatcher("post.jsp").forward(request, response);
         // Send success response
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");

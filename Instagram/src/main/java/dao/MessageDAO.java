@@ -1,7 +1,6 @@
 package dao;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -10,8 +9,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import com.google.gson.Gson;
 
 import model.Message;
 import util.DbConnection;
@@ -54,7 +51,7 @@ public class MessageDAO {
 	            msg1.setReceiverId(rs.getInt("receiver_id"));
 	            msg1.setTimestamp(rs.getString("timestamp"));
 	            messages.add(msg1);
-	            System.out.println(msg1);
+	            //System.out.println(msg1);
 	        }
 	        
 	    } catch (SQLException e) {
@@ -62,7 +59,16 @@ public class MessageDAO {
 	    }
 	    return messages;
 	}
+	public void deleteMessage(int chatID) throws SQLException, ClassNotFoundException{
 
+		try {
+			PreparedStatement st = db.getConnection().prepareStatement("DELETE FROM message WHERE id = ?;");
+			st.setInt(1, chatID);
+			st.executeUpdate();
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+	}
 	
 	public List<Map<String, String>> selectUsers() throws ClassNotFoundException {
 	    List<Map<String, String>> users = new ArrayList<>();
