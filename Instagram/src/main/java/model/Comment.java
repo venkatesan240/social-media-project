@@ -5,7 +5,7 @@ public class Comment {
 	private int commentid;
 	private int postid;
 	private int userid;
-	private String comment;
+	private String commentcontent;
 	private String createdat;
 	
 	
@@ -19,7 +19,7 @@ public class Comment {
 		this.commentid = commentid;
 		this.postid = postid;
 		this.userid = userid;
-		this.comment = comment;
+		this.commentcontent = comment;
 		this.createdat = createdat;
 	}
 
@@ -55,12 +55,12 @@ public class Comment {
 
 
 	public String getComment() {
-		return comment;
+		return commentcontent;
 	}
 
 
 	public void setComment(String comment) {
-		this.comment = comment;
+		this.commentcontent = comment;
 	}
 
 

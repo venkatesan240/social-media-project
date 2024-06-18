@@ -203,11 +203,11 @@
         }
        /* Modal container */
 .modal {
-    display: none;
+  /*   display: none;
     position: fixed;
     z-index: 1;
     left: 0;
-    top: 0;
+    top: 0; */
     width: 100%;
     height: 100%;
     overflow: auto;
@@ -226,7 +226,11 @@
     max-width: 500px;
     border-radius: 10px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-    position: relative; /* To position the close button correctly */
+    position: relative;
+    position:absolute;
+    left:400px;
+    top:140px;
+     /* To position the close button correctly */
 }
 
 /* Close button */
@@ -316,12 +320,13 @@ button:hover {
                     <div class="post-left">
                         <div class="image">
                             <a href="profile.jsp">
-                                <img src="data:image/jpeg;base64,<%= base64Image %>" alt="Profile Image">
+                                <img src="data:image/jpeg;base64,<%= Base64.getEncoder().encodeToString(userDAO.getUserById(post.getUserid()).getProfile()) %>" alt="Profile Image">
                             </a>
                         </div>
                         <div class="details">
                             <p class="name"><%= post.getUsername() %></p>
-                            <p class="timestamp"><%= post.getTimestamp() %></p>
+                            <span class="comment-timestamp"
+					data-timestamp="<%= post.getTimestamp() %>"></span>
                         </div>
                     </div>
                     <div class="post-right">
@@ -334,16 +339,6 @@ button:hover {
                         </div>
                     </div>
                 </div>
-                <script>
-				function toggleDeleteOption(element) {
-				    const deleteOption = element.nextElementSibling;
-				    if (deleteOption.style.display === 'none' || deleteOption.style.display === '') {
-				        deleteOption.style.display = 'block';
-				    } else {
-				        deleteOption.style.display = 'none';
-				    }
-				}
-				</script>
                 <div class="post-content">
                     <img src="data:image/jpg;base64,<%= Base64.getEncoder().encodeToString(post.getImage()) %>" alt="Post Content">
                     <p><%= post.getDescription() %></p>
@@ -369,31 +364,38 @@ button:hover {
             </div>      
     </div>
     <!-- Comment Modal -->
-    <div id="commentModal" class="modal">
-        <div class="modal-content">
-			<span class="close">&times;</span>
-			<h3>Comments</h3>
-			<div id="commentsContainer">
-					<% 
-					List<Comment> comments = null;
-					try {
-						comments = commentDAO.getCommentsByPostId(post.getId());
-					} catch (ClassNotFoundException e) {
-						e.printStackTrace();
-					}
-					for(Comment comment:comments){ %>
-					<a><strong><%= new UserDAO().getUserById(comment.getUserid()).getFirst_name() %></strong>: <%= comment.getComment() %></a>
-					<%} %>			
-			</div>
-			<form action="CommentServlet" method="post">
-				<textarea id="newComment" rows="3" name="comment"
-					placeholder="Add a comment..."></textarea>
-				<input type="hidden" name="userid" value="<%=userId%>" /> <input
-					type="hidden" name="postid" value="<%=post.getId()%>" />
-				<button  id="submitComment">Post Comment</button>
-			</form>
-		</div>
-    </div>
+   <div id="commentModal-<%= post.getId() %>" class="modal">
+                <div class="modal-content">
+                     <span class="close" data-postId="<%= post.getId() %>">&times;</span>
+                    <h3>Comments</h3>
+                    <div id="commentsContainer-<%= post.getId() %>">
+                        <% 
+                        List<Comment> comments = null;
+                        try {
+                            comments = commentDAO.getCommentsByPostId(post.getId());
+                        } catch (ClassNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                        if (comments != null) {
+                            for (Comment comment : comments) {
+                        %>
+				<a> <strong><%=new UserDAO().getUserById(comment.getUserid()).getFirst_name()%></strong>:
+					<%=comment.getComment()%> <span class="comment-timestamp"
+					data-timestamp="<%= comment.getCreatedat() %>"></span>
+				</a> <br>
+				<%
+				}
+				}
+				%>
+                    </div>
+                    <form action="CommentServlet" method="post">
+                        <textarea id="newComment-<%= post.getId() %>" rows="1" name="comment" placeholder="Add a comment..."></textarea>
+                        <input type="hidden" name="userid" value="<%= userId %>" /> 
+                        <input type="hidden" name="postid" value="<%= post.getId() %>" />
+                        <button type="submit" class="submitComment">Post Comment</button>
+                    </form>
+                </div>
+            </div>
  <%
  }
  %>
@@ -401,67 +403,122 @@ button:hover {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <script>
+    function toggleDeleteOption(element) {
+	    const deleteOption = element.nextElementSibling;
+	    if (deleteOption.style.display === 'none' || deleteOption.style.display === '') {
+	        deleteOption.style.display = 'block';
+	    } else {
+	        deleteOption.style.display = 'none';
+	    }
+	}
+    var modals = document.querySelectorAll("[id^='commentModal-']");
 
-        var modal = document.getElementById("commentModal");
+    modals.forEach(function(modal) {
+        var postId = modal.id.split("-")[1]; // Extract postId from modal id
+        var submitButton = modal.querySelector(".submitComment");
 
-        var span = document.getElementsByClassName("close")[0];
- 
-        function openCommentModal(postId) {
-            modal.style.display = "block";
-            fetchComments(postId);
-            document.getElementById("submitComment").onclick = function() { 
-            	submitComment(postId); 
-            };
+        submitButton.onclick = function() {
+            submitComment(postId);
+        };
+    });
+
+    // Function to open comment modal
+    function openCommentModal(postId) {
+        var modal = document.getElementById("commentModal-" + postId);
+        modal.style.display = "block";
+    }
+
+ // Function to close comment modal
+    function closeCommentModal(postId) {
+        var modal = document.getElementById("commentModal-" + postId);
+        modal.style.display = "none";
+    }
+
+    // Event listener for close buttons using event delegation
+    document.addEventListener('click', function(event) {
+        if (event.target.classList.contains('close')) {
+            var postId = event.target.getAttribute('data-postId');
+            closeCommentModal(postId);
+        }
+    });
+    function timeAgo(timestamp) {
+        const seconds = Math.floor((new Date() - new Date(timestamp)) / 1000);
+
+        let interval = Math.floor(seconds / 31536000);
+        if (interval >= 1) {
+            return interval + " year" + (interval === 1 ? "" : "s") + " ago";
         }
 
-        span.onclick = function() {
-            modal.style.display = "none";
+        interval = Math.floor(seconds / 2592000);
+        if (interval >= 1) {
+            return interval + " month" + (interval === 1 ? "" : "s") + " ago";
         }
 
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
-        }       
-    </script>
+        interval = Math.floor(seconds / 86400);
+        if (interval >= 1) {
+            return interval + " day" + (interval === 1 ? "" : "s") + " ago";
+        }
+
+        interval = Math.floor(seconds / 3600);
+        if (interval >= 1) {
+            return interval + " hour" + (interval === 1 ? "" : "s") + " ago";
+        }
+
+        interval = Math.floor(seconds / 60);
+        if (interval >= 1) {
+            return interval + " minute" + (interval === 1 ? "" : "s") + " ago";
+        }
+
+        return Math.floor(seconds) + " second" + (seconds === 1 ? "" : "s") + " ago";
+    }
+    document.addEventListener('DOMContentLoaded', () => {
+        const timestampElements = document.querySelectorAll('.comment-timestamp');
+        timestampElements.forEach(element => {
+            const timestamp = element.getAttribute('data-timestamp');
+            element.textContent = timeAgo(timestamp);
+        });
+    });
+</script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
-        function toggleLike(postId, userId) {
-            console.log("toggleLike called with postId:", postId, "userId:", userId);
-            const heartIcon = $(`#like-button-${postId}`);
-            const likeCountSpan = $(`#like-count-${postId}`);
-            const isLiked = heartIcon.hasClass('fa-solid');
+function toggleLike(postId, userId) {
+    const likeButton = document.getElementById('like-button-' + postId);
+    const likeCount = document.getElementById('like-count-' + postId);
 
-            console.log("Current like state:", isLiked);
+    // Make an AJAX call to toggle the like
+    fetch('LikeServlet', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            postId: postId,
+            userId: userId
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Update the like count
+            likeCount.textContent = data.likeCount;
 
-            $.ajax({
-                url: 'LikeServlet',
-                type: 'POST',
-                contentType: 'application/json',
-                cache: false, 
-                data: JSON.stringify({
-                    userId: userId,
-                    postId: postId,
-                    isLiked: !isLiked
-                }),
-                success: function(response) {
-                    console.log("AJAX success response:", response);
-                    if (response && response.likeCount !== undefined) {
-                        likeCountSpan.text(response.likeCount); 
-                        if (!isLiked) {
-                            heartIcon.removeClass('fa-regular').addClass('fa-solid');
-                        } else {
-                            heartIcon.removeClass('fa-solid').addClass('fa-regular');
-                        }
-                    } else {
-                        console.error("Invalid response format:", response);
-                    }
-                },
-                error: function(xhr, status, error) {
-                    console.error("AJAX request failed: ", status, error);
-                }
-            });
+            // Toggle the like button class
+            if (data.liked) {
+                likeButton.classList.remove('fa-regular');
+                likeButton.classList.add('fa-solid');
+            } else {
+                likeButton.classList.remove('fa-solid');
+                likeButton.classList.add('fa-regular');
+            }
+        } else {
+            alert('Error toggling like.');
         }
-    </script>
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error toggling like.');
+    });
+}
+</script>
 </body>
 </html>

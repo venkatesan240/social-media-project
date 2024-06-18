@@ -61,7 +61,6 @@ public class Like {
 	}
 
 	public boolean isLiked() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 	

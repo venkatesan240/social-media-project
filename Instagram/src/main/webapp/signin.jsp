@@ -123,6 +123,9 @@ main {
     width: 135px;
     border-radius: 8px;
 }
+.forgetpassword{
+	background-color:white;
+}
     </style>
 </head>
 <body>
@@ -137,14 +140,14 @@ response.setHeader("Expires", "0"); // Proxies.
 <main>
         <img src="img/karsten-winegeart-60GsdOMRFGc-unsplash.jpg" alt="" class="phoneImg">
         <div class="form-div">
-            <form action="signin" method="post">
-                <img class="instaLogo" src="img/connect-high-resolution-logo-black.png" alt="logo">
-                <input type="text" class="input" name="email" placeholder="phone number, username, or email" required>
-                <input type="password" class="input" name="password" required placeholder="Password">
-                <button class="login-btn">Log In</button>
-				<!-- <p id="or">or</p> -->
-               <!--  <a href="#" class="fb-login"><i class='bx bxl-facebook-square'></i>Log in with Facebook</a> -->
-            </form>
+     <form id="login-form" action="signin" method="post">
+        <img class="instaLogo" src="img/connect-high-resolution-logo-black.png" alt="logo">
+        <input type="text" class="input" name="email" placeholder="phone number, username, or email" required>
+        <input type="password" class="input" name="password" required placeholder="Password">
+        <button type="submit" class="login-btn">Log In</button>
+        <button type="button" id="forgot-password" class="forgetpassword"><a href="forgetpassword.jsp">Forgot Password?</a></button>
+     </form>
+
 <% 
     // Check if there's an error message
     String errorMessage = (String) request.getAttribute("errorMessage");
@@ -152,6 +155,17 @@ response.setHeader("Expires", "0"); // Proxies.
 %>
         <script type="text/javascript">
             alert("<%= errorMessage %>");
+        </script>
+<%
+    }
+%>
+<% 
+    // Check if there's an error message
+    String Message = (String) request.getAttribute("Message");
+    if (Message != null) {
+%>
+        <script type="text/javascript">
+            alert("<%= Message %>");
         </script>
 <%
     }

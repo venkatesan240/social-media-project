@@ -125,6 +125,12 @@ public class UserDAO {
 	    return users;
 	}
 
-	
+	public void updatePassword(String password,String email) throws ClassNotFoundException, SQLException {
+		String updateQuery="update user set password=? where email=?";
+		PreparedStatement ps=db.getConnection().prepareStatement(updateQuery);
+		ps.setString(1,password);
+		ps.setString(2,email);
+		ps.executeUpdate();
+	}
 	 
 }

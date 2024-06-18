@@ -122,19 +122,29 @@ main {
     width: 135px;
     border-radius: 8px;
 }
+.input {
+            margin-bottom: 10px;
+        }
+        .error-message {
+            color: red;
+            font-size: 14px;
+            margin-top: 5px;
+        }
 </style>
 </head>
 <body>
  <main>
         <img src="img/karsten-winegeart-60GsdOMRFGc-unsplash.jpg" alt="instagram-logo-illustration.png" class="phoneImg">	
         <div class="form-div">
-            <form action="signup" method="post">
+            <form action="signup" method="post" onsubmit="return validatePassword()">
                 <img class="instaLogo" src="img/connect-high-resolution-logo-black.png" alt="logo">
                 <input type="text" class="input" name="first-name" placeholder="first name" required>
                 <input type="text" class="input" name="last-name" placeholder="last name" required>
                 <input type="text" class="input" name="email" placeholder="email" required>
-                <input type="password" class="input" name="password" required placeholder="Password">
-                <input type="password" class="input" name="confirm-password" required placeholder="confirm Password">
+                 <input type="password" class="input" id="password" name="password" required placeholder="Password">
+        <input type="password" class="input" id="confirm-password" name="confirm-password" required placeholder="Confirm Password">
+        <input type="checkbox" id="toggle-password"> Show Password
+        <div id="password-error" class="error-message"></div>
                 <button class="login-btn">Register</button>
 <% 
     // Check if there's an error message
@@ -157,5 +167,31 @@ main {
             </div>
         </div>
     </main>
+     <script>
+        function validatePassword() {
+            var password = document.getElementById("password").value;
+            var confirmPassword = document.getElementById("confirm-password").value;
+            var errorDiv = document.getElementById("password-error");
+
+            if (password !== confirmPassword) {
+                errorDiv.textContent = "Passwords do not match. Please try again.";
+                return false;
+            } else {
+                errorDiv.textContent = "";
+                return true;
+            }
+        }
+    </script>
+    <script>
+        const togglePassword = document.querySelector('#toggle-password');
+        const password = document.querySelector('#password');
+        const confirmPassword = document.querySelector('#confirm-password');
+
+        togglePassword.addEventListener('change', function (e) {
+            const type = e.target.checked ? 'text' : 'password';
+            password.type = type;
+            confirmPassword.type = type;
+        });
+    </script>
 </body>
 </html>

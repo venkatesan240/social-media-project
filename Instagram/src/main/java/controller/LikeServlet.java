@@ -1,8 +1,7 @@
 package controller;
-
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.sql.SQLException;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,15 +9,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.json.JSONObject;
-
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonSyntaxException;
+import com.google.gson.JsonParser;
 
 import dao.LikeDAO;
-import model.LikeRequest;
-
+import dao.PostDAO;
 
 @WebServlet("/LikeServlet")
 public class LikeServlet extends HttpServlet {
@@ -37,23 +32,55 @@ public class LikeServlet extends HttpServlet {
 
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		try {
-            int userId = Integer.parseInt(request.getParameter("userId"));
-            int postId = Integer.parseInt(request.getParameter("postId"));
-            boolean isLiked = Boolean.parseBoolean(request.getParameter("isLiked"));
+		StringBuilder sb = new StringBuilder();
+        BufferedReader reader = request.getReader();
+        String line;
+        while ((line = reader.readLine()) != null) {
+            sb.append(line);
+        }
+        String requestBody = sb.toString();
+        
+        JsonObject jsonObject = JsonParser.parseString(requestBody).getAsJsonObject();
+        int postId = jsonObject.get("postId").getAsInt();
+        int userId = jsonObject.get("userId").getAsInt();
 
-            LikeDAO likeDAO = new LikeDAO();
-            if (isLiked) {
-                likeDAO.addLike(userId, postId);
-            } else {
-                likeDAO.removeLike(userId, postId);
-            }
+        // Initialize DAOs and response objects
+        PostDAO postDAO = new PostDAO();
+        LikeDAO likeDAO = new LikeDAO();
+        boolean liked = false;
+        int likeCount = 0;
 
-            // Redirect back to the same page with updated like count
-            response.sendRedirect("post.jsp?postId=" + postId);
-        } catch (Exception e) {
+        try {
+            try {
+				if (likeDAO.isLikedByUser(postId, userId)) {
+				    likeDAO.removeLike(postId, userId);
+				    liked = false;
+				} else {
+				    likeDAO.addLike(postId, userId);
+				    liked = true;
+				}
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			}
+            try {
+				likeCount = likeDAO.getLikeCount(postId);
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			}
+            
+            JsonObject jsonResponse = new JsonObject();
+            jsonResponse.addProperty("success", true);
+            jsonResponse.addProperty("liked", liked);
+            jsonResponse.addProperty("likeCount", likeCount);
+            response.setContentType("application/json");
+            response.getWriter().write(jsonResponse.toString());
+
+        } catch (SQLException e) {
             e.printStackTrace();
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            JsonObject jsonResponse = new JsonObject();
+            jsonResponse.addProperty("success", false);
+            response.setContentType("application/json");
+            response.getWriter().write(jsonResponse.toString());
         }
 	}
 }

@@ -14,6 +14,7 @@ public class LikeDAO {
             try (PreparedStatement statement = db.getConnection().prepareStatement(sql)) {
                 statement.setInt(1, userId);
                 statement.setInt(2, postId);
+                System.out.println("Adding like for post_id: " + postId + ", user_id: " + userId); // Debug line
                 statement.executeUpdate();
             }
         } catch (SQLException e) {

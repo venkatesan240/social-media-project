@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import dao.MessageDAO;
-import dao.UserDAO;
 import model.Message;
 
 
@@ -26,6 +25,7 @@ public class ChatServlet extends HttpServlet {
     }
 
 
+    @Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		 response.setContentType("application/json");
 	        if(request.getParameter("delete") != null) {
@@ -39,7 +39,7 @@ public class ChatServlet extends HttpServlet {
 	        request.getRequestDispatcher("viewmessage.jsp").forward(request, response);
 
 	}
-
+    @Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		 int senderId = Integer.parseInt(request.getParameter("senderId"));
 	        int receiverId = Integer.parseInt(request.getParameter("receiverId"));

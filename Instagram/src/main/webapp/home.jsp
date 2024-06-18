@@ -266,7 +266,7 @@ button:hover {
 				<div class="post-left">
 					<div class="image">
 					<a href="profile.jsp">
-						<img src="data:image/jpeg;base64,<%= base64Image %>" alt="Profile Image">
+						<img src="data:image/jpeg;base64,<%= Base64.getEncoder().encodeToString(userDAO.getUserById(post.getUserid()).getProfile()) %>" alt="Profile Image">
 						</a>
 					</div>
 					<div class="details">
