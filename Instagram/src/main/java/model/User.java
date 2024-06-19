@@ -2,26 +2,26 @@ package model;
 
 public class User {
 
-	private int user_id;
-	private String first_name;
-	private String last_name;
+	private int userId;
+	private String firstName;
+	private String lastName;
 	private String email;
 	private String password;
-	private String confirmpassword;
+	private String confirmPassword;
 	private byte[] profile;
 	
 	public User() {
 		super();
 	}
-	public User(int user_id, String first_name, String last_name, String email, String password,
+	public User(int userId, String firstName, String lastName, String email, String password,
 			String confirmpassword) {
 		super();
-		this.user_id = user_id;
-		this.first_name = first_name;
-		this.last_name = last_name;
+		this.userId = userId;
+		this.firstName = firstName;
+		this.lastName = lastName;
 		this.email = email;
 		this.password = password;
-		this.confirmpassword = confirmpassword;
+		this.confirmPassword = confirmpassword;
 	}
 	
 	public byte[] getProfile() {
@@ -30,23 +30,23 @@ public class User {
 	public void setProfile(byte[] profile) {
 		this.profile = profile;
 	}
-	public int getUser_id() {
-		return user_id;
+	public int getUserId() {
+		return userId;
 	}
-	public void setUser_id(int user_id) {
-		this.user_id = user_id;
+	public void setUserId(int userId) {
+		this.userId = userId;
 	}
-	public String getFirst_name() {
-		return first_name;
+	public String getFirstName() {
+		return firstName;
 	}
-	public void setFirst_name(String first_name) {
-		this.first_name = first_name;
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
 	}
-	public String getLast_name() {
-		return last_name;
+	public String getLastName() {
+		return lastName;
 	}
-	public void setLast_name(String last_name) {
-		this.last_name = last_name;
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 	public String getEmail() {
 		return email;
@@ -61,15 +61,15 @@ public class User {
 		this.password = password;
 	}
 	public String getConfirmpassword() {
-		return confirmpassword;
+		return confirmPassword;
 	}
 	public void setConfirmpassword(String confirmpassword) {
-		this.confirmpassword = confirmpassword;
+		this.confirmPassword = confirmpassword;
 	}
 	@Override
 	public String toString() {
-		return "user [user_id=" + user_id + ", first_name=" + first_name + ", last_name=" + last_name + ", email="
-				+ email + ", password=" + password + ", confirmpassword=" + confirmpassword + "]";
+		return "user [user_id=" + userId + ", first_name=" + firstName + ", last_name=" + lastName + ", email="
+				+ email + ", password=" + password + ", confirmpassword=" + confirmPassword + "]";
 	}
 	
 	

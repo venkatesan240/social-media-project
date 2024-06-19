@@ -39,7 +39,6 @@ public class signup extends HttpServlet {
 		String  lastname = request.getParameter("last-name");
 		String  email = request.getParameter("email");
 		String password = request.getParameter("password");
-		String  confirmpassword = request.getParameter("confirm-password");
 		
 		boolean status = true;
 		request.removeAttribute("fmsg");
@@ -77,9 +76,9 @@ public class signup extends HttpServlet {
 		} else {
 			User user = new User();
 			user.setPassword(password);
-			user.setFirst_name(firstname);
+			user.setFirstName(firstname);
 			user.setEmail(email);
-			user.setLast_name(lastname);
+			user.setLastName(lastname);
 			String result = null;
 			try {
 				result = UserDAO.register(user);

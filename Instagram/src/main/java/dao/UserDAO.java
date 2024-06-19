@@ -18,8 +18,8 @@ public class UserDAO {
 	    try {
 	        Connection conn = db.getConnection();
 	        PreparedStatement st = conn.prepareStatement("INSERT INTO user(first_name, last_name, email, password) VALUES (?, ?, ?, ?);");
-	        st.setString(1, user.getFirst_name());
-	        st.setString(2, user.getLast_name());
+	        st.setString(1, user.getFirstName());
+	        st.setString(2, user.getLastName());
 	        st.setString(3, user.getEmail());
 	        st.setString(4, user.getPassword());
 	        st.execute();
@@ -32,8 +32,6 @@ public class UserDAO {
 	public boolean logincredencial(User user) throws ClassNotFoundException, SQLException {
 		String selectQuery="select email,password from user where email='"+user.getEmail()+"' and password='"+user.getPassword()+"'";
 		PreparedStatement ps=db.getConnection().prepareStatement(selectQuery);
-//		ps.setString(1,user.getEmail());
-//		ps.setString(2,user.getPassword());
 		  ResultSet rows = ps.executeQuery();
 	        ResultSetMetaData metaData = rows.getMetaData();
 	        int columnCount = metaData.getColumnCount();
@@ -51,8 +49,8 @@ public class UserDAO {
 	public void updateUser(User user,int userid) throws SQLException, ClassNotFoundException {
 		String updateQuery="update user set first_name=?,last_name=?,email=?,profile=? where user_id=?";
 		PreparedStatement ps=db.getConnection().prepareStatement(updateQuery);
-		ps.setString(1,user.getFirst_name());
-		ps.setString(2,user.getLast_name());
+		ps.setString(1,user.getFirstName());
+		ps.setString(2,user.getLastName());
 		ps.setString(3,user.getEmail());
 		ps.setBytes(4,user.getProfile());
 		ps.setInt(5,userid);
@@ -83,7 +81,6 @@ public class UserDAO {
 		
 	}
 	public User getUserById(int userId) throws ClassNotFoundException {
-		//System.out.println("gerUserId print");
         User user = null;
         try {
             String sql = "SELECT first_name, last_name, email,profile FROM user WHERE user_id = ?";
@@ -93,13 +90,11 @@ public class UserDAO {
 
             if (resultSet.next()) {
                 user = new User();
-                user.setUser_id(userId);
-                user.setFirst_name(resultSet.getString("first_name"));
-                user.setLast_name(resultSet.getString("last_name"));
+                user.setUserId(userId);
+                user.setFirstName(resultSet.getString("first_name"));
+                user.setLastName(resultSet.getString("last_name"));
                 user.setEmail(resultSet.getString("email"));
                 user.setProfile(resultSet.getBytes("profile"));
-                
-               // System.out.println("is there - " +resultSet.getString("first_name"));
                 return user;
             }
         } catch (SQLException e) {
@@ -111,18 +106,22 @@ public class UserDAO {
     }
 	
 	public List<User> searchUsersByUsername(String query) throws SQLException, ClassNotFoundException {
-	    List<User> users = new ArrayList<>();
-	    String searchQuery = "SELECT user_id, first_name FROM user WHERE first_name LIKE ?";
-	    PreparedStatement ps = db.getConnection().prepareStatement(searchQuery);
-	    ps.setString(1, "%" + query + "%");
-	    ResultSet rs = ps.executeQuery();
-	    while (rs.next()) {
-	        User user = new User();
-	        user.setUser_id(rs.getInt("user_id"));
-	        user.setFirst_name(rs.getString("first_name"));
-	        users.add(user);
-	    }
-	    return users;
+		List<User> users = new ArrayList<>();
+        String sql = "SELECT * FROM user WHERE first_name LIKE ?";
+        try (Connection connection = db.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, "%" + query + "%");
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                User user = new User();
+                user.setUserId(resultSet.getInt("user_id"));
+                user.setFirstName(resultSet.getString("first_name"));
+                users.add(user);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return users;
 	}
 
 	public void updatePassword(String password,String email) throws ClassNotFoundException, SQLException {

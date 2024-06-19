@@ -329,7 +329,7 @@ button:hover {
 						e.printStackTrace();
 					}
 					for(Comment comment:comments){ %>
-					<a><strong><%= new UserDAO().getUserById(comment.getUserid()).getFirst_name() %></strong>: <%= comment.getComment() %></a>
+					<a><strong><%= new UserDAO().getUserById(comment.getUserid()).getFirstName() %></strong>: <%= comment.getComment() %></a>
 					<%} %>			
 			</div>
 			<form action="CommentServlet" method="post">

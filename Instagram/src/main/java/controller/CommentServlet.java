@@ -22,12 +22,13 @@ public class CommentServlet extends HttpServlet {
     }
     Comment comment=new Comment();
 
+    @Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 	        response.setContentType("application/json");
 	        response.setCharacterEncoding("UTF-8");
 	}
-
+    @Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		 int postId = Integer.parseInt(request.getParameter("postid"));
 		 int userid = Integer.parseInt(request.getParameter("userid"));

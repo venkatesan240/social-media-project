@@ -69,7 +69,19 @@ body {
     color: #007bff;
     font-size: 16px;
 }
-
+.profile {
+            display: flex;
+            align-items: center;
+        }
+        .profile img {
+            border-radius: 50%;
+            margin-right: 10px;
+            width: 50px; /* Adjust size as needed */
+            height: 50px; /* Adjust size as needed */
+        }
+        .profile span {
+            font-size: 1.2em;
+        }
         
     </style>
 </head>
@@ -88,8 +100,10 @@ body {
             %>
             <div class="card" onclick="javascript:window.location='viewmessage.jsp?receiverId=<%= user1.get("id") %>';">
                 <div class="card-body">
-                    <span><%= user1.get("username") %></span>
-                    <i class="fas fa-paper-plane"></i>
+					<div class="profile">
+						 <span><%=user1.get("username")%></span>
+					</div>
+					<i class="fas fa-paper-plane"></i>
                 </div>
             </div>
             <%

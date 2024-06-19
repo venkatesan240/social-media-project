@@ -353,14 +353,6 @@ button:hover {
 				</div>
 				<i class="fa-regular fa-comment" onclick="openCommentModal(<%= post.getId() %>)"></i>
                 </div>
-                <!-- <div class="add-comment">
-                    <div class="left-side">
-                        <input type="text" placeholder="Add a comment...">
-                    </div>
-                    <div class="right-side">
-                        <p class="text-primary mb-0">Post</p>
-                    </div>
-                </div> -->
             </div>      
     </div>
     <!-- Comment Modal -->
@@ -379,7 +371,7 @@ button:hover {
                         if (comments != null) {
                             for (Comment comment : comments) {
                         %>
-				<a> <strong><%=new UserDAO().getUserById(comment.getUserid()).getFirst_name()%></strong>:
+				<a> <strong><%=new UserDAO().getUserById(comment.getUserid()).getFirstName()%></strong>:
 					<%=comment.getComment()%> <span class="comment-timestamp"
 					data-timestamp="<%= comment.getCreatedat() %>"></span>
 				</a> <br>

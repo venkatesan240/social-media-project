@@ -147,7 +147,6 @@ response.setHeader("Expires", "0"); // Proxies.
         <button type="submit" class="login-btn">Log In</button>
         <button type="button" id="forgot-password" class="forgetpassword"><a href="forgetpassword.jsp">Forgot Password?</a></button>
      </form>
-
 <% 
     // Check if there's an error message
     String errorMessage = (String) request.getAttribute("errorMessage");

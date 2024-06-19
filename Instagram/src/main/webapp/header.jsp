@@ -6,8 +6,6 @@
 <%
     UserDAO userDAO = new UserDAO();
     String base64Image = "";
-
-    System.out.println(session.getAttribute("userid"));
     User user = userDAO.getUserById((Integer)(session.getAttribute("userid")));
     if (user != null && user.getProfile() != null) {
         //System.out.println("user null");
@@ -124,7 +122,28 @@ img {
     header nav ul li {
         margin: 5px 0;
     }
-}
+     .search-box {
+            position: relative;
+            width: 300px;
+        }
+        #searchResults {
+            position: absolute;
+            top: 35px;
+            left: 0;
+            right: 0;
+            background-color: white;
+            border: 1px solid #ccc;
+            max-height: 200px;
+            overflow-y: auto;
+            display: none;
+        }
+        .search-result-item {
+            padding: 10px;
+            cursor: pointer;
+        }
+        .search-result-item:hover {
+            background-color: #f0f0f0;
+        }
 </style>
 </head>
 <body>
@@ -176,29 +195,34 @@ img {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 <script>
-function searchUsers() {
-    var query = document.getElementById('searchBox').value;
-    if (query.length == 0) {
-        document.getElementById('searchResults').innerHTML = '';
-        return;
-    }
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', 'SearchUsers?query=' + query, true);
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState == 4 && xhr.status == 200) {
-            var users = JSON.parse(xhr.responseText);
-            var resultsDiv = document.getElementById('searchResults');
-            resultsDiv.innerHTML = '';
-            users.forEach(function(user) {
-                var userDiv = document.createElement('div');
-                userDiv.textContent = user.getFirst_name(); // Customize as needed
-                resultsDiv.appendChild(userDiv);
-            });
+        function searchUsers() {
+            const query = document.getElementById('searchBox').value;
+            if (query.length < 3) {
+                document.getElementById('searchResults').style.display = 'none';
+                return;
+            }
+            fetch(`SearchUsers?query=${query}`)
+                .then(response => response.json())
+                .then(data => {
+                    const searchResults = document.getElementById('searchResults');
+                    searchResults.innerHTML = '';
+                    if (data.length > 0) {
+                        searchResults.style.display = 'block';
+                        data.forEach(user => {
+                            const div = document.createElement('div');
+                            div.className = 'search-result-item';
+                            div.textContent = user.username;
+                            searchResults.appendChild(div);
+                        });
+                    } else {
+                        searchResults.style.display = 'none';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
         }
-    };
-    xhr.send();
-}
-</script>
+    </script>
 </body>
 </html>
 

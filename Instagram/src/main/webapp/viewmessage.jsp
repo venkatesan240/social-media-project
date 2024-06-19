@@ -97,7 +97,7 @@ try {
                     <div class="row justify-content-start">
                         <div class="col-8 alert alert-secondary" role="alert">
                             <h5>
-                                <%= new UserDAO().getUserById(message.getSenderId()).getFirst_name() %> <%-- <a href="${pageContext.request.contextPath}/ChatServlet?id=<%= request.getAttribute("receiverId") %>&delete=<%= message.getId() %>" class="card-link" style="float: right;"><i style="color: red;" class="far fa-trash-alt"></i></a> --%>
+                                <%= new UserDAO().getUserById(message.getSenderId()).getFirstName() %> <%-- <a href="${pageContext.request.contextPath}/ChatServlet?id=<%= request.getAttribute("receiverId") %>&delete=<%= message.getId() %>" class="card-link" style="float: right;"><i style="color: red;" class="far fa-trash-alt"></i></a> --%>
                             </h5>
                             <%= message.getMessage() %>
                             <p style="text-align: right;"><%= message.getTimestamp() %></p>

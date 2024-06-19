@@ -56,19 +56,14 @@
 		<form action="UpdateProfile" method="post"
 			enctype="multipart/form-data">
 			<span> <label for="first-name">First Name:</label> 
-			<input	type="text" id="first-name" name="first-name" value="<%= user.getFirst_name() %>" required>
+			<input	type="text" id="first-name" name="first-name" value="<%= user.getFirstName() %>" required>
 			</span> <span> <label for="last-name">Last Name:</label> 
-			<input	type="text" id="last-name" name="last-name" value="<%= user.getLast_name() %>" required>
+			<input	type="text" id="last-name" name="last-name" value="<%= user.getLastName() %>" required>
 			</span> <span> <label for="email">Email:</label> 
 			<input type="email"	id="email" name="email"value="<%= user.getEmail() %>"  required>
 			</span> <span> <label for="profile-image">Set Profile:</label>
 			 <input	type="file" id="profile-image" name="profile-image"  value="<%= user.getProfile() %>" accept="image/*">
-			</span> <!-- <span> <label for="password">Password:</label> <input
-				type="password" id="password" name="password"required>
-			</span> <span> <label for="confirm-password">Confirm
-					Password:</label> <input type="password" id="confirm-password"
-				name="confirm-password" required>
-			</span> -->
+			</span>
 			<button type="submit">Update Profile</button>
 		</form>
 	</div>

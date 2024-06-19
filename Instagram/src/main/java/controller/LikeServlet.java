@@ -43,9 +43,7 @@ public class LikeServlet extends HttpServlet {
         JsonObject jsonObject = JsonParser.parseString(requestBody).getAsJsonObject();
         int postId = jsonObject.get("postId").getAsInt();
         int userId = jsonObject.get("userId").getAsInt();
-
         // Initialize DAOs and response objects
-        PostDAO postDAO = new PostDAO();
         LikeDAO likeDAO = new LikeDAO();
         boolean liked = false;
         int likeCount = 0;
@@ -54,9 +52,8 @@ public class LikeServlet extends HttpServlet {
             try {
 				if (likeDAO.isLikedByUser(postId, userId)) {
 				    likeDAO.removeLike(postId, userId);
-				    liked = false;
 				} else {
-				    likeDAO.addLike(postId, userId);
+				    likeDAO.addLike( userId,postId);
 				    liked = true;
 				}
 			} catch (ClassNotFoundException e) {

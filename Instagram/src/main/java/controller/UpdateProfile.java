@@ -70,22 +70,16 @@ public class UpdateProfile extends HttpServlet {
 		}
 		
 		User user=new User();
-		user.setFirst_name(fname);
-		user.setLast_name(lname);
+		user.setFirstName(fname);
+		user.setLastName(lname);
 		user.setEmail(email1);
 		user.setProfile(data);
-		System.out.println("first name"+user.getFirst_name());
-		System.out.println("last name"+user.getLast_name());
-		System.out.println("email1"+user.getEmail());
-		System.out.println("image"+user.getProfile());
 		UserDAO userdao=new UserDAO();
 		try {
 			userdao.updateUser(user,userid);
-		} catch (ClassNotFoundException e) {
+		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		} 
 		request.setAttribute("updateMessage", "Profile updated successfully");
 		 request.getRequestDispatcher("home.jsp").forward(request, response);
 	}

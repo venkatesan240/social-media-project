@@ -73,7 +73,7 @@ public class MessageDAO {
 	public List<Map<String, String>> selectUsers() throws ClassNotFoundException {
 	    List<Map<String, String>> users = new ArrayList<>();
 	    try (Connection connection = db.getConnection()) {
-	        String sql = "SELECT user_id, first_name FROM user";
+	        String sql = "SELECT user_id, first_name,profile FROM user";
 	        Statement statement = connection.createStatement();
 	        ResultSet resultSet = statement.executeQuery(sql);
 
@@ -82,7 +82,6 @@ public class MessageDAO {
 	            user.put("id", String.valueOf(resultSet.getInt("user_id")));
 	            user.put("username", resultSet.getString("first_name"));
 	            users.add(user);
-	            //System.out.println(users);
 	        }
 	    } catch (SQLException e) {
 	        e.printStackTrace();

@@ -36,18 +36,22 @@ public class SearchUsersServlet extends HttpServlet {
 	 */
     private UserDAO userDAO = new UserDAO();
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String query = request.getParameter("query");
-        List<User> users = null;
-		try {
-			users = userDAO.searchUsersByUsername(query);
-		} catch (ClassNotFoundException | SQLException e) {
-			e.printStackTrace();
-		} 
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        PrintWriter out = response.getWriter();
-        out.print(new Gson().toJson(users));
-        out.flush();
+		 String query = request.getParameter("query");
+	        UserDAO userDAO = new UserDAO();
+	        List<User> users = null;
+			try {
+				users = userDAO.searchUsersByUsername(query);
+			} catch (ClassNotFoundException | SQLException e) {
+				e.printStackTrace();
+			} 
+
+	        response.setContentType("application/json");
+	        response.setCharacterEncoding("UTF-8");
+	        PrintWriter out = response.getWriter();
+	        Gson gson = new Gson();
+	        String json = gson.toJson(users);
+	        out.print(json);
+	        out.flush();
 	}
 
 	/**

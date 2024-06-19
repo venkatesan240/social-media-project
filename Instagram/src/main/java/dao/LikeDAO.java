@@ -3,21 +3,21 @@ package dao;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 
 import util.DbConnection;
 
 public class LikeDAO {
 	static DbConnection db=new DbConnection();
-	public void addLike(int userId, int postId) throws ClassNotFoundException {
+	public void addLike(int userId, int postId) throws ClassNotFoundException, SQLException {
         try {
             String sql = "INSERT INTO likes (user_id, post_id) VALUES (?, ?)";
             try (PreparedStatement statement = db.getConnection().prepareStatement(sql)) {
                 statement.setInt(1, userId);
                 statement.setInt(2, postId);
-                System.out.println("Adding like for post_id: " + postId + ", user_id: " + userId); // Debug line
                 statement.executeUpdate();
             }
-        } catch (SQLException e) {
+        } catch (SQLIntegrityConstraintViolationException e) {
             e.printStackTrace();
         }
     }
@@ -34,7 +34,7 @@ public class LikeDAO {
             e.printStackTrace();
         }
     }
-
+    
     public int getLikeCount(int postId) throws ClassNotFoundException {
         try  {
             String sql = "SELECT COUNT(*) AS like_count FROM likes WHERE post_id = ?";

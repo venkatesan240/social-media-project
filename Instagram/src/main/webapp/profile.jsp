@@ -78,7 +78,7 @@ a p:hover {
 <h1>User Profile</h1>
      <div>
       <img src="data:image/jpeg;base64,<%= base64Image %>" alt="Profile Image">
-        <p>Username: <%= user.getFirst_name() %></p>
+        <p>Username: <%= user.getFirstName() %></p>
         <p>Email: <%= user.getEmail() %></p>
        <a href="update.jsp"><p>Edit profile</p></a>
        <a href="logout"><p>Logout</p></a>
