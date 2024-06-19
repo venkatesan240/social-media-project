@@ -14,13 +14,13 @@ import model.User;
  * Servlet implementation class signup
  */
 @WebServlet("/signup")
-public class signup extends HttpServlet {
+public class Signup extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public signup() {
+    public Signup() {
         super();
     }
 

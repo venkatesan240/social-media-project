@@ -7,7 +7,6 @@
 <meta charset="ISO-8859-1">
 <title>Insert title here</title>
  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <!--  <link rel="stylesheet" href="sign.css"> -->
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700&family=Ubuntu:wght@300;400;500&display=swap');

@@ -2,7 +2,6 @@ package controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.SQLException;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -13,51 +12,47 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
 
-import dao.UserDAO;
+import dao.LikeDAO;
 import model.User;
 
 /**
- * Servlet implementation class SearchUsersServlet
+ * Servlet implementation class ShowLikes
  */
-@WebServlet("/SearchUsers")
-public class SearchUsersServlet extends HttpServlet {
+@WebServlet("/showLikes")
+public class ShowLikes extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public SearchUsersServlet() {
+    public ShowLikes() {
         super();
-
     }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
+    LikeDAO likeDAO=new LikeDAO();
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		 String query = request.getParameter("query");
-	        UserDAO userDAO = new UserDAO();
-	        List<User> users = null;
-			try {
-				users = userDAO.searchUsersByUsername(query);
-			} catch (ClassNotFoundException | SQLException e) {
-				e.printStackTrace();
-			} 
+		int postId = Integer.parseInt(request.getParameter("postId"));
+        List<User> users = null;
+		try {
+			users = likeDAO.getUsersWhoLiked(postId);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
 
-	        response.setContentType("application/json");
-	        response.setCharacterEncoding("UTF-8");
-	        PrintWriter out = response.getWriter();
-	        Gson gson = new Gson();
-	        String json = gson.toJson(users);
-	        out.print(json);
-	        out.flush();
+        response.setContentType("application/json");
+        PrintWriter out = response.getWriter();
+        Gson gson = new Gson();
+        out.print(gson.toJson(users));
+        out.flush();
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
 		doGet(request, response);
 	}
 

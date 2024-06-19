@@ -51,7 +51,6 @@ public class MessageDAO {
 	            msg1.setReceiverId(rs.getInt("receiver_id"));
 	            msg1.setTimestamp(rs.getString("timestamp"));
 	            messages.add(msg1);
-	            //System.out.println(msg1);
 	        }
 	        
 	    } catch (SQLException e) {

@@ -49,7 +49,7 @@ public class PostServlet extends HttpServlet {
 		post.setImage(data);
 		try {
 			postdao.savePost(post);
-		} catch (ClassNotFoundException | SQLException | IOException e) {
+		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();
 		}  
 		 request.getRequestDispatcher("post.jsp").forward(request, response);

@@ -1,6 +1,5 @@
 package dao;
 
-import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -13,7 +12,7 @@ import util.DbConnection;
 public class PostDAO {
 	
 	static DbConnection db=new DbConnection();
-	public void savePost(Post post) throws SQLException, IOException, ClassNotFoundException {
+	public void savePost(Post post) throws SQLException, ClassNotFoundException {
             String sql = "INSERT INTO posts (user_id,description, image,user_name) values (?,?,?,?)";
             PreparedStatement stmt= db.getConnection().prepareStatement(sql);
             stmt.setInt(1,post.getUserid());

@@ -13,7 +13,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import dao.LikeDAO;
-import dao.PostDAO;
 
 @WebServlet("/LikeServlet")
 public class LikeServlet extends HttpServlet {

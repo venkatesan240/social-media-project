@@ -8,6 +8,8 @@
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="model.Comment" %>
 <%@ page import="dao.commentDAO" %>
+<%@ page import="model.Like" %>
+<%@ page import="dao.LikeDAO" %>
 <%
     PostDAO postDAO = new PostDAO();
     List<Post> posts = new ArrayList<>();
@@ -350,7 +352,41 @@ button:hover {
 						onclick="toggleLike(<%=post.getId()%>, <%=userId%>)"></i> 
 						<span	id="like-count-<%=post.getId()%>"><%=post.getLikeCount()%></span>
 					likes
-				</div>
+						
+					<!-- Modal -->
+					<%
+					if (request.getAttribute("likedUsers") != null) {
+					%>
+					<div id=LikeModal-<%= post.getId() %> class="modal">
+						<div class="modal-content">
+							<span class="close">&times;</span>
+							<h3>Users who liked this post</h3>
+							<div id="likesList">
+								<%
+								 List<User> users = null;
+								LikeDAO likeDAO=new LikeDAO();
+								try {
+									users = likeDAO.getUsersWhoLiked(post.getId());
+								} catch (ClassNotFoundException e) {
+									e.printStackTrace();
+								}
+								for (User user1 : users) {
+								%>
+								<div>
+									<img src="<%=user1.getProfile()%>"
+										alt="<%=user1.getFirstName()%>'s profile picture" width="30"
+										height="30">
+									<%=user.getFirstName()%>
+									<%=user.getLastName()%>
+								</div>
+								<%
+								}
+								%>
+							</div>
+						</div>
+					</div>
+					<% } %>
+				</div>	
 				<i class="fa-regular fa-comment" onclick="openCommentModal(<%= post.getId() %>)"></i>
                 </div>
             </div>      

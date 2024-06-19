@@ -1,7 +1,6 @@
 package controller;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 import java.util.Map;
 
@@ -10,17 +9,13 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import com.google.gson.Gson;
-
 import dao.MessageDAO;
-import model.User;
 
 @WebServlet("/userlistservlet")
-public class userlistservlet extends HttpServlet {
+public class Userlistservlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	 MessageDAO msgdao=new MessageDAO();
-    public userlistservlet() {
+    public Userlistservlet() {
         super();
     }
 
