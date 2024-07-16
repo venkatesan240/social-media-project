@@ -42,7 +42,6 @@ public class CommentServlet extends HttpServlet {
 			e.printStackTrace();
 		}
         request.getRequestDispatcher("post.jsp").forward(request, response);
-        // Send success response
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         response.getWriter().write("{\"status\": \"success\"}");

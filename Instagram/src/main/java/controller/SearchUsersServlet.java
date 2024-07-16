@@ -43,7 +43,6 @@ public class SearchUsersServlet extends HttpServlet {
 			} catch (ClassNotFoundException | SQLException e) {
 				e.printStackTrace();
 			} 
-
 	        response.setContentType("application/json");
 	        response.setCharacterEncoding("UTF-8");
 	        PrintWriter out = response.getWriter();

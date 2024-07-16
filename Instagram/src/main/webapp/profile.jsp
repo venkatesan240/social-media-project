@@ -14,7 +14,7 @@
     }
 %> 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <style>
 /* Profile Page Styles */
 body {
@@ -77,11 +77,12 @@ a p:hover {
 <body>
 <h1>User Profile</h1>
      <div>
-      <img src="data:image/jpeg;base64,<%= base64Image %>" alt="Profile Image">
+      <img src="data:image/jpeg;base64,<%= base64Image %>" alt="Profile">
         <p>Username: <%= user.getFirstName() %></p>
         <p>Email: <%= user.getEmail() %></p>
        <a href="update.jsp"><p>Edit profile</p></a>
        <a href="logout"><p>Logout</p></a>
+       <button>Send Request</button>
      </div>
 </body>
 </html>

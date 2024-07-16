@@ -13,41 +13,24 @@ import javax.servlet.http.HttpSession;
 import dao.UserDAO;
 import model.User;
 
-/**
- * Servlet implementation class signin
- */
+
 @WebServlet("/signin")
 public class SignIn extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
     public SignIn() {
         super();
-
     }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String email = request.getParameter("email");
 		String password = request.getParameter("password");
-		 if (email == null || password == null || email.isEmpty() || password.isEmpty()) {
-	            request.setAttribute("errorMessage", "Email and Password are required.");
-	            request.getRequestDispatcher("signin.jsp").forward(request, response);
-	            return;
-	        }
 		User user=new User();
 		user.setEmail(email);
 		user.setPassword(password);

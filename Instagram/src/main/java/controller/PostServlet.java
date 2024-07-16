@@ -44,8 +44,7 @@ public class PostServlet extends HttpServlet {
 			data=new byte[is.available()];
 			is.read(data);
 			 is.close();
-		}
-		
+		}	
 		post.setImage(data);
 		try {
 			postdao.savePost(post);

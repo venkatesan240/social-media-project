@@ -39,6 +39,7 @@ public class PostDAO {
             }
         return posts;
     }
+
 	public boolean deletePost(int postId) throws ClassNotFoundException {
         String sql = "DELETE FROM posts WHERE id = ?";
         try {

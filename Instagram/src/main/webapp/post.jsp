@@ -21,6 +21,7 @@
 %>
 <% 
         int userId = (int) session.getAttribute("userid");
+
         %>
 <!DOCTYPE html>
 <html lang="en">
@@ -64,12 +65,12 @@
             padding: 10px 15px;
             border: none;
             border-radius: 5px;
-            background-color: #007bff;
+            background-color: #0e0f0f;
             color: white;
             cursor: pointer;
         }
         .post-form button:hover {
-            background-color: #0056b3;
+            background-color: #202327;
         }
         .posts {
             background-color: #fff;
@@ -299,7 +300,49 @@ button {
 button:hover {
     background-color: #218838;
 }
+.like-section {
+    position: relative;
+    display: inline-block;
+}
 
+.like-count-tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip-content {
+    visibility: hidden;
+    opacity: 0;
+    width: 200px;
+    background-color: #f9f9f9;
+    color: #000;
+    text-align: left;
+    border-radius: 5px;
+    padding: 10px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%; /* Position the tooltip above the text */
+    left: 60px;
+    margin-left: -100px; /* Center the tooltip */
+    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.2);
+    transition: opacity 0.3s;
+}
+
+.tooltip-content::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #f9f9f9 transparent transparent transparent;
+}
+
+.like-count-tooltip:hover .tooltip-content {
+    visibility: visible;
+    opacity: 1;
+}
     </style>
 </head>
 <body>
@@ -314,15 +357,21 @@ button:hover {
             <button type="submit">Post</button>
         </form>
     </div>
-
     <div id="posts-container">
-        <% for (Post post : posts) { %>
+        <% for (Post post : posts) { 
+         try {
+				LikeDAO likeDAO = new LikeDAO();					
+				int likecount=likeDAO.getLikeCount(post.getId());
+				 post.setLikeCount(likecount);
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			}%>
             <div class="posts">
                 <div class="post-title">
                     <div class="post-left">
                         <div class="image">
                             <a href="profile.jsp">
-                                <img src="data:image/jpeg;base64,<%= Base64.getEncoder().encodeToString(userDAO.getUserById(post.getUserid()).getProfile()) %>" alt="Profile Image">
+                                <img src="data:image/jpeg;base64,<%= Base64.getEncoder().encodeToString(userDAO.getUserById(post.getUserid()).getProfile()) %>" alt="Profile">
                             </a>
                         </div>
                         <div class="details">
@@ -349,44 +398,31 @@ button:hover {
 				<div class="like-share-comment">
 					<i id="like-button-<%=post.getId()%>"
 						class="fa-regular fa-heart like-button"
-						onclick="toggleLike(<%=post.getId()%>, <%=userId%>)"></i> 
-						<span	id="like-count-<%=post.getId()%>"><%=post.getLikeCount()%></span>
-					likes
-						
-					<!-- Modal -->
-					<%
-					if (request.getAttribute("likedUsers") != null) {
-					%>
-					<div id=LikeModal-<%= post.getId() %> class="modal">
-						<div class="modal-content">
-							<span class="close">&times;</span>
-							<h3>Users who liked this post</h3>
-							<div id="likesList">
+						onclick="toggleLike(<%=post.getId()%>, <%=userId%>)"></i> <span
+						id="like-count-<%=post.getId()%>" class="like-count-tooltip">
+						<%=post.getLikeCount()%>likes
+						<div class="tooltip-content" id="tooltip-<%= post.getId() %>">
+							<h5>See who liked this post:</h5>
+							<ul>
 								<%
-								 List<User> users = null;
-								LikeDAO likeDAO=new LikeDAO();
+								LikeDAO likeDAO = new LikeDAO();
+								List<User> users = null;
 								try {
 									users = likeDAO.getUsersWhoLiked(post.getId());
 								} catch (ClassNotFoundException e) {
 									e.printStackTrace();
 								}
+								%>
+								<%
 								for (User user1 : users) {
 								%>
-								<div>
-									<img src="<%=user1.getProfile()%>"
-										alt="<%=user1.getFirstName()%>'s profile picture" width="30"
-										height="30">
-									<%=user.getFirstName()%>
-									<%=user.getLastName()%>
-								</div>
+								<li><%=user1.getFirstName()%> <%=user1.getLastName()%></li>
 								<%
 								}
 								%>
-							</div>
-						</div>
-					</div>
-					<% } %>
-				</div>	
+							</ul>
+						</div> </span>
+				</div>
 				<i class="fa-regular fa-comment" onclick="openCommentModal(<%= post.getId() %>)"></i>
                 </div>
             </div>      
@@ -395,7 +431,7 @@ button:hover {
    <div id="commentModal-<%= post.getId() %>" class="modal">
                 <div class="modal-content">
                      <span class="close" data-postId="<%= post.getId() %>">&times;</span>
-                    <h3>Comments</h3>
+                    <h5>Comments</h5>
                     <div id="commentsContainer-<%= post.getId() %>">
                         <% 
                         List<Comment> comments = null;

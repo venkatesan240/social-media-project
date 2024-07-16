@@ -2,7 +2,7 @@
     pageEncoding="ISO-8859-1"%>
     <%@ page import="model.User" %>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="ISO-8859-1">
 <title>Insert title here</title>

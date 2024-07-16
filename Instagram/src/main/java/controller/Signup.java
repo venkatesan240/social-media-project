@@ -39,6 +39,7 @@ public class Signup extends HttpServlet {
 		String  lastname = request.getParameter("last-name");
 		String  email = request.getParameter("email");
 		String password = request.getParameter("password");
+		System.out.println(firstname);
 		
 		boolean status = true;
 		request.removeAttribute("fmsg");
@@ -89,7 +90,7 @@ public class Signup extends HttpServlet {
 				request.setAttribute("rmsg", result);
 				request.getRequestDispatcher("signin.jsp").forward(request, response);
 			}else {
-				request.setAttribute("error","Registration failed");
+				request.setAttribute("error","User already exists");
 				request.getRequestDispatcher("signup.jsp").forward(request, response);
 			}
 			

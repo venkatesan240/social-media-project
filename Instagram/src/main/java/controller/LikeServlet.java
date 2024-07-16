@@ -28,8 +28,7 @@ public class LikeServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
-
-
+	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		StringBuilder sb = new StringBuilder();
         BufferedReader reader = request.getReader();
@@ -37,12 +36,10 @@ public class LikeServlet extends HttpServlet {
         while ((line = reader.readLine()) != null) {
             sb.append(line);
         }
-        String requestBody = sb.toString();
-        
+        String requestBody = sb.toString();        
         JsonObject jsonObject = JsonParser.parseString(requestBody).getAsJsonObject();
         int postId = jsonObject.get("postId").getAsInt();
         int userId = jsonObject.get("userId").getAsInt();
-        // Initialize DAOs and response objects
         LikeDAO likeDAO = new LikeDAO();
         boolean liked = false;
         int likeCount = 0;
@@ -52,7 +49,7 @@ public class LikeServlet extends HttpServlet {
 				if (likeDAO.isLikedByUser(postId, userId)) {
 				    likeDAO.removeLike(postId, userId);
 				} else {
-				    likeDAO.addLike( userId,postId);
+				    likeDAO.addLike(userId,postId);
 				    liked = true;
 				}
 			} catch (ClassNotFoundException e) {

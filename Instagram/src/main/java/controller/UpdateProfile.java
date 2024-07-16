@@ -50,7 +50,7 @@ public class UpdateProfile extends HttpServlet {
 	    }
 	    int userid = (Integer) session.getAttribute("userid");
 	    if (userid == 0) {
-	        response.sendRedirect("signin.jsp");
+	        response.sendRedirect("signin.jsp");	
 	        return;
 	    } 
 		String  fname = request.getParameter("first-name");

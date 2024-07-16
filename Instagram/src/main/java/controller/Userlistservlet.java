@@ -27,11 +27,8 @@ public class Userlistservlet extends HttpServlet {
             e.printStackTrace();
         }
         request.setAttribute("users", users);
-        request.getRequestDispatcher("chat.jsp").forward(request, response);
-        
+        request.getRequestDispatcher("chat.jsp").forward(request, response);        
     }
-
-
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 

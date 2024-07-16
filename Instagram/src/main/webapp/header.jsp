@@ -12,9 +12,8 @@
         base64Image = Base64.getEncoder().encodeToString(user.getProfile());
     }
 %>
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="ISO-8859-1">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -122,28 +121,6 @@ img {
     header nav ul li {
         margin: 5px 0;
     }
-     .search-box {
-            position: relative;
-            width: 300px;
-        }
-        #searchResults {
-            position: absolute;
-            top: 35px;
-            left: 0;
-            right: 0;
-            background-color: white;
-            border: 1px solid #ccc;
-            max-height: 200px;
-            overflow-y: auto;
-            display: none;
-        }
-        .search-result-item {
-            padding: 10px;
-            cursor: pointer;
-        }
-        .search-result-item:hover {
-            background-color: #f0f0f0;
-        }
 </style>
 </head>
 <body>
@@ -151,11 +128,6 @@ img {
     <header>
         <div class="logo">
             <img src="img/connect-high-resolution-logo-black.png" alt="insta">
-        </div>
-        <div class="search-box">
-          <input type="search" id="searchBox" placeholder="Search" oninput="searchUsers()">
-          <i class="fa-solid fa-magnifying-glass" onclick="searchUsers()"></i>
-          <div id="searchResults"></div>
         </div>
         <% 
         // Check if there's an error message
@@ -170,13 +142,14 @@ img {
         %>
        <nav>
         <ul>
+        	<li><a href="search.jsp"><i class="fa-solid fa-magnifying-glass"></i></a></li>
             <li><a href="home.jsp"><i class="fa-solid fa-house nav-icon"></i></a></li>
             <li><a href="${pageContext.request.contextPath}/userlistservlet"><i class="fa-solid fa-message nav-icon"></i></a></li>
             <li><a href="post.jsp"><i class="fa-solid fa-square-plus nav-icon"></i></a></li>
             <li><a href="#"><i class="fa-solid fa-heart nav-icon"></i></a></li>
             <li class="nav-item profile-icon">
                 <a href="profile.jsp">
-                    <img src="data:image/jpeg;base64,<%= base64Image %>" alt="Profile Image">
+                    <img src="data:image/jpeg;base64,<%= base64Image %>" alt="Profile">
                 </a>
                 <div class="dropdown-content">
                     <div class="name">
@@ -190,39 +163,9 @@ img {
     </nav>
     </header>
 </div>
-
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-<script>
-        function searchUsers() {
-            const query = document.getElementById('searchBox').value;
-            if (query.length < 3) {
-                document.getElementById('searchResults').style.display = 'none';
-                return;
-            }
-            fetch(`SearchUsers?query=${query}`)
-                .then(response => response.json())
-                .then(data => {
-                    const searchResults = document.getElementById('searchResults');
-                    searchResults.innerHTML = '';
-                    if (data.length > 0) {
-                        searchResults.style.display = 'block';
-                        data.forEach(user => {
-                            const div = document.createElement('div');
-                            div.className = 'search-result-item';
-                            div.textContent = user.username;
-                            searchResults.appendChild(div);
-                        });
-                    } else {
-                        searchResults.style.display = 'none';
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-        }
-    </script>
 </body>
 </html>
 

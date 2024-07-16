@@ -37,12 +37,8 @@ public class MessageDAO {
 	        statement.setInt(1, msg.getSenderId());
 	        statement.setInt(2, msg.getReceiverId());
 	        statement.setInt(3, msg.getSenderId());
-	        statement.setInt(4, msg.getReceiverId());
-	        
-	       
-	            
+	        statement.setInt(4, msg.getReceiverId());     
 	        ResultSet rs = statement.executeQuery();
-
 	        while (rs.next()) {
 	        	Message msg1=new Message();
 	        	msg1.setId(rs.getInt("id"));
@@ -51,17 +47,16 @@ public class MessageDAO {
 	            msg1.setReceiverId(rs.getInt("receiver_id"));
 	            msg1.setTimestamp(rs.getString("timestamp"));
 	            messages.add(msg1);
-	        }
-	        
+	        }	        
 	    } catch (SQLException e) {
 	        e.printStackTrace();
 	    }
 	    return messages;
 	}
+	
 	public void deleteMessage(int chatID) throws SQLException, ClassNotFoundException{
-
 		try {
-			PreparedStatement st = db.getConnection().prepareStatement("DELETE FROM message WHERE id = ?;");
+			PreparedStatement st = db.getConnection().prepareStatement("DELETE FROM message WHERE id = ?");
 			st.setInt(1, chatID);
 			st.executeUpdate();
 		}catch(SQLException e) {
@@ -75,7 +70,6 @@ public class MessageDAO {
 	        String sql = "SELECT user_id, first_name,profile FROM user";
 	        Statement statement = connection.createStatement();
 	        ResultSet resultSet = statement.executeQuery(sql);
-
 	        while (resultSet.next()) {
 	            Map<String, String> user = new HashMap<>();
 	            user.put("id", String.valueOf(resultSet.getInt("user_id")));

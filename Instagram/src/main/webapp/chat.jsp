@@ -10,79 +10,76 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"> 
     <style>
        /* Friend List Styles */
-body {
-    font-family: Arial, sans-serif;
+/* Reset some default styles */
+body, h2, ul {
     margin: 0;
     padding: 0;
-    background-color: #f4f4f9;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
 }
 
 .friend-list {
-    width: 400px;
-    margin: 50px auto;
-    padding: 20px;
-    background-color: #fff;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
+    max-width: 300px;
+    margin: 20px auto;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .friend-list h2 {
+     background-color: #0f160f;
+    color: white;
+    padding: 10px;
     text-align: center;
-    color: #333;
-    margin-bottom: 20px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    font-size: 1.5em;
 }
 
 .modal-body {
-    overflow-y: scroll;
-    max-height: 350px;
+    padding: 10px;
 }
 
 .card {
-    padding: 10px;
-    margin: 10px 0;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    cursor: pointer;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    transition: background-color 0.3s ease;
+    background-color: white;
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    transition: box-shadow 0.3s;
+    cursor: pointer;
 }
 
 .card:hover {
-    background-color: #f0f0f0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .card-body {
     display: flex;
     align-items: center;
+    width: 100%;
 }
 
-.card-body span {
-    margin-right: 10px;
-    font-size: 16px;
+.profile {
+    flex-grow: 1;
+}
+
+.profile span {
+    font-size: 1em;
+    font-weight: bold;
     color: #333;
 }
 
-.card-body i {
-    color: #007bff;
-    font-size: 16px;
-}
-.profile {
-            display: flex;
-            align-items: center;
-        }
-        .profile img {
-            border-radius: 50%;
-            margin-right: 10px;
-            width: 50px; /* Adjust size as needed */
-            height: 50px; /* Adjust size as needed */
-        }
-        .profile span {
-            font-size: 1.2em;
-        }
-        
+.fa-paper-plane {
+    color: #060706;
+    font-size: 1.2em;
+    margin-left: 10px;
+}   
     </style>
 </head>
 <body>
