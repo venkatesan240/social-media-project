@@ -27,6 +27,7 @@
 <span>☑</span> users can't delete others post they can only report<br>
 <span>☑</span> if the post id reported it can sent to admin page for handling<br>
 <span>☑</span> users can Send and receive direct messages<br>
+<span>☑</span> users can search other users to message with them<br>
 <span>☑</span> users can delete the messages<br>
 <span>☑</span> users can report the messages<br>
 
@@ -49,9 +50,9 @@
 ### ================ Software And Tools Required ================<br>
 - Eclipse<br>
 - Java [JDK 17]<br>
-- Tomcat v8.0+<br>
+- Tomcat v9.0+<br>
 - Apache Maven<br>
-- Editor Sql developer<br>
+- Editor mysql workbench<br>
 
 
 ### =================Absence Social media Features  =================<br>
